@@ -1,0 +1,46 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.main{
+    height: 100vh;
+    overflow: auto;
+}
+
+header {
+
+    height: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+    display: flex;
+    flex-direction: row;
+    background-color: gray;
+    justify-content: space-around;
+    align-items: center;
+}
+
+a:visited {
+    background-color: white;
+    color: inherit;
+    text-decoration: none;
+}
+
+a {
+    padding: 10px;
+    border-radius: 20px;
+    background-color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    background-color: black;
+    transition: color 1s ease;
+    transition: background-color 0.5 ease;
+}
