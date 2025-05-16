@@ -3,8 +3,6 @@ import React,{useState} from "react";
 import { Text, View, TextInput,StyleSheet,TouchableOpacity} from "react-native";
 
 export default function Index() {
-  
-  
   const [text,setText] = useState("");
   const [textoFinal,setTextoFinal] = useState("");
   const [lista,setLista] = useState<String[]>([]);
