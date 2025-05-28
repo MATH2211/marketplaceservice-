@@ -21,4 +21,5 @@ app.use("/estabelecimento",estabelecimentoRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,"0.0.0.0", () => {
   console.log(`API rodando em http://192.168.0.109:${PORT}`);
+  console.log(`API rodando em ${process.env.HOST}:${PORT}`)
 });
