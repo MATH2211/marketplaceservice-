@@ -12,7 +12,7 @@ router.post('/create', verifyToken, estabelecimentoController.criar);
 router.get("/",(req, res) => {
     const caminho = path.join(__dirname, "../../web/pages/dashboard.html");
     res.sendFile(caminho);
-  });
+});
 
 router.get("/list",verifyToken, estabelecimentoController.listar)
 

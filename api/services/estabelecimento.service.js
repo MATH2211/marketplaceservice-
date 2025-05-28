@@ -1,13 +1,15 @@
 const pool = require('../config/db');
-
-async function criarEstabelecimento({ nome, endereco }, adminId) {
-    const result = await pool.query(
-        'INSERT INTO estabelecimento (nome, endereco, id_admin) VALUES ($1, $2, $3) RETURNING *',
-        [nome, endereco, adminId]
-    );
-    return result.rows[0];
+const db = require("../config/db")
+async function criarEstabelecimento({ nome, endereco }, id_admin) {
+    const query = `
+    INSERT INTO estabelecimento (nome, endereco, id_admin)
+    VALUES ($1, $2, $3)
+    RETURNING *;
+  `;
+    const values = [nome, endereco, id_admin];
+    const { rows } = await db.query(query, values);
+    return rows[0];
 }
-
 async function listarEstabelecimentos(adminId) {
     const result = await pool.query(
         'SELECT * FROM estabelecimento WHERE id_admin = $1',
