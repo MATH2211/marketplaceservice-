@@ -5,11 +5,12 @@ async function criarEstabelecimento({ nome, endereco }, id_admin) {
     INSERT INTO estabelecimento (nome, endereco, id_admin)
     VALUES ($1, $2, $3)
     RETURNING *;
-  `;
+    `;
     const values = [nome, endereco, id_admin];
     const { rows } = await db.query(query, values);
     return rows[0];
 }
+
 async function listarEstabelecimentos(adminId) {
     const result = await pool.query(
         'SELECT * FROM estabelecimento WHERE id_admin = $1',

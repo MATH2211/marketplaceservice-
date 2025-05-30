@@ -22,7 +22,19 @@ async function listImagens(id_estabelecimento) {
 }
 */
 
+async function listarImagensPorEstabelecimento(id_estabelecimento) {
+  const query = `
+    SELECT id, imagem_url, tipo
+    FROM imagens
+    WHERE id_estabelecimento = $1;
+  `;
+  const values = [id_estabelecimento];
+  const { rows } = await db.query(query, values);
+  return rows;
+}
+
 
 module.exports = {
   salvarImagem,
+  listarImagensPorEstabelecimento
 };

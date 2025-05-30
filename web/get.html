@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site do Estabelecimento</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+        }
+        header {
+            padding: 20px;
+            text-align: center;
+        }
+        .banner {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            padding: 20px;
+        }
+        .servicos, .galeria, .depoimentos, .promocoes, .faq {
+            margin-bottom: 40px;
+        }
+        .card {
+            display: inline-block;
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            vertical-align: top;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+        }
+        .botao {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="site"></div>
+
+<script>
+    const json = {
+        "visual": {
+            "titulo": "Salão da Ana",
+            "subtitulo": "Cuidando da sua beleza",
+            "descricao": "Somos especialistas em beleza, oferecendo os melhores serviços para você se sentir incrível.",
+            "cores": {
+                "fundo": "#fef6f9",
+                "cabecalho": "#e91e63",
+                "botoes": "#c2185b",
+                "textos": "#333333"
+            },
+            "fonte": "Arial",
+            "layout": "minimalista"
+        },
+        "midias": {
+            "logo": "https://via.placeholder.com/150",
+            "banner": "https://via.placeholder.com/1200x300",
+            "galeria": [
+                "https://via.placeholder.com/200",
+                "https://via.placeholder.com/201",
+                "https://via.placeholder.com/202"
+            ],
+            "videos": [
+                "https://www.youtube.com/embed/dQw4w9WgXcQ"
+            ]
+        },
+        "contatos": {
+            "instagram": "https://instagram.com",
+            "facebook": "https://facebook.com",
+            "tiktok": "https://tiktok.com",
+            "whatsapp": "https://wa.me/5511999999999",
+            "localizacao": "https://goo.gl/maps/XxXxXxXx",
+            "site": "https://meusite.com"
+        },
+        "operacao": {
+            "horario": "Seg - Sab: 09h às 18h",
+            "mensagemForaHorario": "Estamos fechados no momento",
+            "politicas": "Cancelamentos devem ser feitos com 24h de antecedência."
+        },
+        "destaques": {
+            "servicos": ["Corte", "Coloração", "Manicure", "Pedicure"],
+            "depoimentos": ["Ótimo atendimento!", "Adorei meu corte!", "Super recomendo!"],
+            "promocoes": ["Combo cabelo + unha", "10% de desconto nas terças"]
+        },
+        "extras": {
+            "botoes": ["Agendar agora", "Fale conosco"],
+            "faq": ["Como faço para agendar? Utilize nosso WhatsApp ou o botão de agendamento.;Quais formas de pagamento? Aceitamos Pix, cartão e dinheiro."],
+            "popup": "Seja bem-vindo(a) ao nosso salão!"
+        }
+    };
+
+    // Aplicar estilos
+    document.body.style.background = json.visual.cores.fundo;
+    document.body.style.fontFamily = json.visual.fonte;
+
+    const site = document.getElementById('site');
+
+    site.innerHTML = `
+    <header style="background: ${json.visual.cores.cabecalho}; color: ${json.visual.cores.textos}">
+        <img src="${json.midias.logo}" alt="Logo" height="80"><br>
+        <h1>${json.visual.titulo}</h1>
+        <h3>${json.visual.subtitulo}</h3>
+    </header>
+
+    <div class="banner" style="background-image: url('${json.midias.banner}');"></div>
+
+    <div class="container" style="color: ${json.visual.cores.textos}">
+        <p>${json.visual.descricao}</p>
+
+        <div class="servicos">
+            <h2>Serviços em Destaque</h2>
+            ${json.destaques.servicos.map(s => `<div class="card">${s}</div>`).join('')}
+        </div>
+
+        <div class="galeria">
+            <h2>Galeria</h2>
+            ${json.midias.galeria.map(img => `<img src="${img}" width="200" style="margin:5px;">`).join('')}
+        </div>
+
+        <div class="depoimentos">
+            <h2>Depoimentos</h2>
+            ${json.destaques.depoimentos.map(dep => `<div class="card">${dep}</div>`).join('')}
+        </div>
+
+        <div class="promocoes">
+            <h2>Promoções</h2>
+            ${json.destaques.promocoes.map(p => `<div class="card">${p}</div>`).join('')}
+        </div>
+
+        <div class="videos">
+            <h2>Vídeos</h2>
+            ${json.midias.videos.map(v => `
+                <iframe width="300" height="180" src="${v}" frameborder="0" allowfullscreen></iframe>
+            `).join('')}
+        </div>
+
+        <div class="faq">
+            <h2>Perguntas Frequentes</h2>
+            <ul>
+                ${json.extras.faq.map(f => `<li>${f}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="contatos">
+            <h2>Contatos</h2>
+            <p>Horário: ${json.operacao.horario}</p>
+            <p>Localização: <a href="${json.contatos.localizacao}" target="_blank">Ver no mapa</a></p>
+            <p>Políticas: ${json.operacao.politicas}</p>
+            <p>
+                <a href="${json.contatos.instagram}" target="_blank">Instagram</a> |
+                <a href="${json.contatos.facebook}" target="_blank">Facebook</a> |
+                <a href="${json.contatos.tiktok}" target="_blank">TikTok</a> |
+                <a href="${json.contatos.whatsapp}" target="_blank">WhatsApp</a> |
+                <a href="${json.contatos.site}" target="_blank">Site</a>
+            </p>
+        </div>
+
+        <div class="botoes">
+            ${json.extras.botoes.map(b => `<a class="botao" style="background:${json.visual.cores.botoes}" href="#">${b}</a>`).join('')}
+        </div>
+    </div>
+
+    <footer style="background: ${json.visual.cores.cabecalho}; color: ${json.visual.cores.textos}">
+        &copy; ${new Date().getFullYear()} ${json.visual.titulo}
+    </footer>
+    `;
+
+    // Popup de boas-vindas
+    if(json.extras.popup){
+        alert(json.extras.popup);
+    }
+</script>
+
+</body>
+</html>

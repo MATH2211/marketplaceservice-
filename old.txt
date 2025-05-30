@@ -1,0 +1,21 @@
+
+
+async function criar(req, res) {
+  try {
+    const adminId = req.adminId;
+    const { nome, endereco } = req.body;
+
+    const novo = await estabelecimentoService.criarEstabelecimento({ nome, endereco }, adminId);
+    res.status(201).json(novo);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+async function criarEstabelecimento({ nome, endereco }, adminId) {
+    const result = await pool.query(
+        'INSERT INTO estabelecimento (nome, endereco, id_admin) VALUES ($1, $2, $3) RETURNING *',
+        [nome, endereco, adminId]
+    );
+    return result.rows[0];
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Personalização</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            box-sizing: border-box;
+        }
+        .preview {
+            margin-top: 10px;
+        }
+        img {
+            max-height: 100px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Formulário de Personalização</h1>
+
+<form id="formulario">
+    <h2>🎨 Aparência</h2>
+    <label>Título da Página</label>
+    <input type="text" name="titulo">
+
+    <label>Subtítulo/Slogan</label>
+    <input type="text" name="subtitulo">
+
+    <label>Descrição</label>
+    <textarea name="descricao"></textarea>
+
+    <label>Cor de Fundo</label>
+    <input type="color" name="corFundo">
+
+    <label>Cor do Cabeçalho</label>
+    <input type="color" name="corCabecalho">
+
+    <label>Cor dos Botões</label>
+    <input type="color" name="corBotoes">
+
+    <label>Cor dos Textos</label>
+    <input type="color" name="corTextos">
+
+    <label>Fonte</label>
+    <input type="text" name="fonte" placeholder="Ex.: Arial, Roboto">
+
+    <label>Layout</label>
+    <select name="layout">
+        <option value="classico">Clássico</option>
+        <option value="moderno">Moderno</option>
+        <option value="minimalista">Minimalista</option>
+    </select>
+
+    <h2>🖼️ Mídias</h2>
+
+    <label>Logo</label>
+    <input type="file" name="logo" accept="image/*">
+    <div class="preview" id="previewLogo"></div>
+
+    <label>Banner</label>
+    <input type="file" name="banner" accept="image/*">
+    <div class="preview" id="previewBanner"></div>
+
+    <label>Galeria (várias imagens)</label>
+    <input type="file" name="galeria" accept="image/*" multiple>
+    <div class="preview" id="previewGaleria"></div>
+
+    <label>Vídeos embed (URLs)</label>
+    <textarea name="videos" placeholder="Cole os links separados por quebra de linha"></textarea>
+
+    <h2>🔗 Links e Contatos</h2>
+    <label>Instagram</label>
+    <input type="url" name="instagram">
+
+    <label>Facebook</label>
+    <input type="url" name="facebook">
+
+    <label>TikTok</label>
+    <input type="url" name="tiktok">
+
+    <label>WhatsApp</label>
+    <input type="url" name="whatsapp">
+
+    <label>Localização (Google Maps)</label>
+    <input type="url" name="localizacao">
+
+    <label>Site Próprio</label>
+    <input type="url" name="site">
+
+    <h2>🕑 Operação</h2>
+    <label>Horário de Funcionamento</label>
+    <input type="text" name="horario">
+
+    <label>Mensagem Fora de Horário</label>
+    <input type="text" name="mensagemForaHorario">
+
+    <label>Políticas</label>
+    <textarea name="politicas"></textarea>
+
+    <h2>🏷️ Serviços e Destaques</h2>
+    <label>Serviços (separados por vírgula)</label>
+    <input type="text" name="servicos">
+
+    <label>Depoimentos (separados por vírgula)</label>
+    <input type="text" name="depoimentos">
+
+    <label>Promoções (separadas por vírgula)</label>
+    <input type="text" name="promocoes">
+
+    <h2>🧩 Funcionalidades Extras</h2>
+    <label>Botões Personalizados (separados por vírgula)</label>
+    <input type="text" name="botoes">
+
+    <label>FAQ (Perguntas e respostas separadas por ponto e vírgula)</label>
+    <textarea name="faq" placeholder="Ex.: Como agendar?;Quais formas de pagamento?"></textarea>
+
+    <label>Popup de boas-vindas</label>
+    <input type="text" name="popup">
+
+    <br><br>
+    <button type="submit">Gerar JSON</button>
+</form>
+
+<h2>📄 Resultado do JSON:</h2>
+<pre id="saida"></pre>
+
+<script>
+    const form = document.getElementById('formulario');
+    const saida = document.getElementById('saida');
+
+    const previewImage = (input, container) => {
+        const div = document.getElementById(container);
+        div.innerHTML = '';
+        [...input.files].forEach(file => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            div.appendChild(img);
+        });
+    };
+
+    form.logo.addEventListener('change', () => previewImage(form.logo, 'previewLogo'));
+    form.banner.addEventListener('change', () => previewImage(form.banner, 'previewBanner'));
+    form.galeria.addEventListener('change', () => previewImage(form.galeria, 'previewGaleria'));
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const json = {
+            visual: {
+                titulo: form.titulo.value,
+                subtitulo: form.subtitulo.value,
+                descricao: form.descricao.value,
+                cores: {
+                    fundo: form.corFundo.value,
+                    cabecalho: form.corCabecalho.value,
+                    botoes: form.corBotoes.value,
+                    textos: form.corTextos.value
+                },
+                fonte: form.fonte.value,
+                layout: form.layout.value
+            },
+            midias: {
+                logo: form.logo.files.length ? form.logo.files[0].name : '',
+                banner: form.banner.files.length ? form.banner.files[0].name : '',
+                galeria: [...form.galeria.files].map(f => f.name),
+                videos: form.videos.value.split('\n').filter(v => v.trim() !== '')
+            },
+            contatos: {
+                instagram: form.instagram.value,
+                facebook: form.facebook.value,
+                tiktok: form.tiktok.value,
+                whatsapp: form.whatsapp.value,
+                localizacao: form.localizacao.value,
+                site: form.site.value
+            },
+            operacao: {
+                horario: form.horario.value,
+                mensagemForaHorario: form.mensagemForaHorario.value,
+                politicas: form.politicas.value
+            },
+            destaques: {
+                servicos: form.servicos.value.split(',').map(s => s.trim()).filter(s => s),
+                depoimentos: form.depoimentos.value.split(',').map(d => d.trim()).filter(d => d),
+                promocoes: form.promocoes.value.split(',').map(p => p.trim()).filter(p => p)
+            },
+            extras: {
+                botoes: form.botoes.value.split(',').map(b => b.trim()).filter(b => b),
+                faq: form.faq.value.split(';').map(f => f.trim()).filter(f => f),
+                popup: form.popup.value
+            }
+        };
+
+        saida.textContent = JSON.stringify(json, null, 4);
+    });
+</script>
+
+</body>
+</html>
