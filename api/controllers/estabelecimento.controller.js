@@ -58,7 +58,8 @@ async function listar(req, res) {
   try {
     const adminId = req.adminId;
     const estabelecimentos = await estabelecimentoService.listarEstabelecimentos(adminId);
-    res.json(estabelecimentos);
+    const imagens = await imagemService.getLogoByIdAdmin(adminId);
+    res.json({estabelecimentos, imagens});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
