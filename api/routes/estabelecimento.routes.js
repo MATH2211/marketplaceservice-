@@ -18,7 +18,7 @@ router.post(
 
 // 📄 Listar estabelecimentos
 router.get("/list", verifyToken, estabelecimentoController.listar);
-
+router.get("/imagens",verifyToken,estabelecimentoController.getLogo);
 module.exports = router;
 
 

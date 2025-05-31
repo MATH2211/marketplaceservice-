@@ -64,6 +64,17 @@ async function listar(req, res) {
   }
 }
 
+async function getLogo(req,res) {
+    try{
+      const adminId = req.adminId;
+      const imagens = await imagemService.getLogoByIdAdmin(adminId);
+      res.json(imagens);
+    }catch (err){
+      res.status(500).json({error: err.message});
+    }
+}
+
+
 async function deletar(req, res) {
   try {
     const adminId = req.adminId;
@@ -78,5 +89,6 @@ async function deletar(req, res) {
 module.exports = {
   criar,
   listar,
-  deletar
+  deletar,
+  getLogo
 };

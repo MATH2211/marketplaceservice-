@@ -33,8 +33,23 @@ async function listarImagensPorEstabelecimento(id_estabelecimento) {
   return rows;
 }
 
+async function getLogoByIdAdmin(id_admin) {
+  const query = `
+  SELECT i.* 
+  FROM imagens i 
+  JOIN estabelecimento e ON i.id_estabelecimento = e.id
+  WHERE e.id_admin = $1
+  AND i.tipo = 'logo';
+`
+  const values = [id_admin];
+  const { rows } = await db.query(query, values);
+  return rows;
+}
+
+
 
 module.exports = {
   salvarImagem,
-  listarImagensPorEstabelecimento
+  listarImagensPorEstabelecimento,
+  getLogoByIdAdmin
 };
