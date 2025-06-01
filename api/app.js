@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+const servicoRoutes = require("./routes/servico.routes");
+
 
 const adminRoutes = require('./routes/admin.routes');
 const dashboardRoutes = require("./routes/dashboard.routes");
@@ -19,6 +21,10 @@ app.use('/admin', adminRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/estabelecimento", estabelecimentoRoutes);
 //app.use('/cloudinary', cloudinaryRoutes); // rota para upload de imagens
+
+app.use("/servicos", servicoRoutes);
+
+
 
 // Middleware global de erro (opcional)
 app.use((err, req, res, next) => {

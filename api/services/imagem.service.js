@@ -13,6 +13,18 @@ async function salvarImagem({ imagem_url, tipo = 'logo', id_estabelecimento }) {
 }
 
 
+async function updateServiceImage({imagem_url,id_estabelecimento}) {
+  const query = `
+    UPDATE SERVICOS
+    SET imagem_url = $1
+    WHERE id = $2
+  `
+  const values = [imagem_url,id_estabelecimento]
+  const {rows} = await db.query(query,values);
+  return rows[0];
+}
+
+
 /*
 async function listImagens(id_estabelecimento) {
     const query = `select * from imagens where id_estabelecimento = ($1)`;
