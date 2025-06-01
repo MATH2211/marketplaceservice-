@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { globalStyles } from '../styles/global';
@@ -6,7 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_URL } from '../config/config';
 import { Ionicons } from '@expo/vector-icons';
+import { AuthContext } from '../context/AuthContext';
 type Props = NativeStackScreenProps<any>;
+
+
 
 interface Estabelecimento {
   id: number;
@@ -22,6 +25,7 @@ interface Imagem {
 }
 
 export default function Home({ navigation }: Props) {
+  const {logout} = useContext(AuthContext);
   const [estabelecimentos, setEstabelecimentos] = useState<Estabelecimento[]>([]);
   const [imagens, setImagens] = useState<Imagem[]>([]);
 
@@ -68,8 +72,8 @@ export default function Home({ navigation }: Props) {
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('token');
-    await AsyncStorage.removeItem('id_estabelecimento');
-    navigation.navigate('Login');
+  await AsyncStorage.removeItem('id_estabelecimento');
+  logout();
   };
 
   return (

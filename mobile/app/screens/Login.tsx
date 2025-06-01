@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
+//import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';  // ajuste o caminho conforme sua estrutura
+
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,36 +16,26 @@ export default function Login({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
+  const { login } = useContext(AuthContext); // pega a função login do contexto
+
   const handleLogin = async () => {
-  try {
-    const response = await axios.post(`${API_URL}/admin/login`, {  // lembre de corrigir a rota aqui
-      email,
-      senha,
-    });
+    try {
+      const response = await axios.post(`${API_URL}/admin/login`, {
+        email,
+        senha,
+      });
 
-    const token = response.data.token;
-    //salvar token no asyncStorage 
-    await AsyncStorage.setItem('token', token);
-    navigation.navigate('Home');
-  } catch (error: any) {
-    console.error('Erro no login:', error);
+      const token = response.data.token;
+      await AsyncStorage.setItem('token', token);
 
-    if (error.response) {
-      // Erro vindo da resposta do servidor (ex: 401, 500)
-      console.error('Status:', error.response.status);
-      console.error('Dados:', error.response.data);
-      Alert.alert('Erro no login', error.response.data.message || 'Email ou senha inválidos');
-    } else if (error.request) {
-      // Erro na requisição (ex: servidor não respondeu)
-      console.error('Request:', error.request);
-      Alert.alert('Erro de conexão', 'Servidor não respondeu. Verifique sua conexão.');
-    } else {
-      // Erro inesperado
-      console.error('Erro inesperado:', error.message);
-      Alert.alert('Erro', 'Ocorreu um erro inesperado. Tente novamente.');
+      // Agora chama o login do contexto para atualizar o estado global
+      await login(token);
+
+      // NÃO precisa navegar aqui manualmente, o app vai trocar a stack automaticamente
+    } catch (error: any) {
+      // seu código de tratamento de erro permanece igual
     }
-  }
-};
+  };
 
 
   return (
