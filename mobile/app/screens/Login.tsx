@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { globalStyles } from '../styles/global';
 import { API_URL } from '../config/config';
@@ -20,8 +21,8 @@ export default function Login({ navigation }: Props) {
     });
 
     const token = response.data.token;
-    // Você pode salvar esse token no asyncStorage se quiser
-
+    //salvar token no asyncStorage 
+    await AsyncStorage.setItem('token', token);
     navigation.navigate('Home');
   } catch (error: any) {
     console.error('Erro no login:', error);
