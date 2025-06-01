@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './screens/Login';
-import Home from './screens/Home';
-import Register from './screens/Register';
-import ForgotPassword from './screens/ForgotPassword';
-import NewEstabelecimento from './screens/estabelecimento/New';
-//Estabeleciment
-import Dashboard from './screens/estabelecimento/Dashboard';
-
-
-
-const Stack = createNativeStackNavigator();
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthStack from './stack/AuthStack';
+import AppStack from './stack/AppStack';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function App() {
+  const [isLogged, setIsLogged] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setIsLogged(!!token);
+    };
+    checkToken();
+  }, []);
+
+  if (isLogged === null) {
+    // Enquanto verifica o token
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Register" component={Register} options={{ title: 'Cadastro' }} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ title: 'Recuperar Senha' }} />
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Dashboard' }} />
-        <Stack.Screen name="NewEstabelecimento" component={NewEstabelecimento} options={{ title: 'Novo Estabelecimento' }}
-      />
-      </Stack.Navigator>
-      
+      {isLogged ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
