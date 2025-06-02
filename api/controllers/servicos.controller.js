@@ -17,17 +17,18 @@ async function criar(req, res) {
         res.status(500).json({ error: err.message });
     }
 }
-
 async function listar(req, res) {
     try {
         const id_estabelecimento = req.idEstabelecimento;
-
-        const lista = await servicoService.listarServicos(id_estabelecimento);
+        console.log(`Req.idEstabelecimento: ${id_estabelecimento}`);
+        const lista = await servicoService.getServices({id_estabelecimento});
         res.json(lista);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }
+
+
 
 module.exports = {
     criar,

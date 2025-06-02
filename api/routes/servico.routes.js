@@ -4,7 +4,7 @@ const servicoController = require("../controllers/servicos.controller");
 
 const verifyToken = require("../utils/verifyToken");
 const verificarEstabelecimento = require("../utils/verificarEstabelecimento");
-
+const verifyByParams = require('../utils/verifyByParams');
 // Rota para criar um serviço
 router.post(
   "/create",
@@ -14,11 +14,22 @@ router.post(
 );
 
 // Rota para listar serviços de um estabelecimento
+
+/*
 router.get(
   "/list/:id_estabelecimento",
   verifyToken,
   verificarEstabelecimento,
   servicoController.listar
 );
+*/
+
+router.get(
+  "/list/:id_estabelecimento",
+  verifyToken,
+  verifyByParams,
+  servicoController.listar
+);
+
 
 module.exports = router;

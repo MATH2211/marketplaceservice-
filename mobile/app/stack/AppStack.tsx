@@ -10,6 +10,7 @@ import Agendamentos from '../screens/estabelecimento/agendamentos/Agendamentos';
 //Serviços
 import Servicos from '../screens/estabelecimento/servicos/Servicos';
 
+import NewServico from '../screens/estabelecimento/servicos/NewServico';
 //Horários
 import Horarios from '../screens/estabelecimento/horarios/Horarios';
 
@@ -36,6 +37,8 @@ export default function AppStack() {
             {/* Serviços */}
             <Stack.Screen name='Servicos' component={Servicos} options={{'title': 'Servircos'}}/>
             
+            {/* Novo */}
+            <Stack.Screen name='NewServico' component={NewServico} options={{'title': 'Servicos'}}></Stack.Screen>
             {/* Horários */}
             <Stack.Screen name='Horarios' component={Horarios} options={{'title': 'Horarios'}}/>
             

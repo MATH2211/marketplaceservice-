@@ -11,6 +11,17 @@ async function newServico({nome,valor,tempo,id_estabelecimento, imagem_url = nul
     return rows[0];
 }
 
+async function getServices({id_estabelecimento}) {
+    console.log(`id: ${id_estabelecimento}`);
+    const query = `
+        SELECT * FROM servicos where id_estabelecimento = $1
+    `
+    const values = [id_estabelecimento];
+    console.log(`values: ${values}`);
+    const {rows} = await db.query(query,values);
+    return rows;
+}
+
 async function updateImagemServico({ id, id_estabelecimento, imagem_url }) {
     const query = `
         UPDATE servicos
@@ -26,5 +37,6 @@ async function updateImagemServico({ id, id_estabelecimento, imagem_url }) {
 
 module.exports = {
     newServico,
-    updateImagemServico
+    updateImagemServico,
+    getServices
 };
