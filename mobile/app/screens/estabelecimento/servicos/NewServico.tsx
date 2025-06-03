@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import axios from 'axios';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
-const API_URL = 'http://192.168.0.109:3000';
+import { globalStyles } from '../../../styles/global';
+import { API_URL } from '../../../config/config';
 
 type Props = NativeStackScreenProps<any>;
 
@@ -12,103 +13,108 @@ export default function NewServico({ navigation }: Props) {
   const [nome, setNome] = useState('');
   const [valor, setValor] = useState('');
   const [tempo, setTempo] = useState('');
+  const [image, setImage] = useState<string | null>(null);
 
-  const handleAdicionar = async () => {
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!nome || !valor || !tempo) {
+      Alert.alert('Preencha todos os campos obrigatórios');
+      return;
+    }
+
     try {
       const token = await AsyncStorage.getItem('token');
       const idEstabelecimento = await AsyncStorage.getItem('id_estabelecimento');
 
-      await axios.post(
-        `${API_URL}/servicos/create`,
-        {
-          nome,
-          valor,
-          tempo: Number(tempo),
-          id_estabelecimento: Number(idEstabelecimento),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      if (!token || !idEstabelecimento) {
+        Alert.alert('Erro', 'Token ou ID do estabelecimento não encontrado');
+        return;
+      }
 
-      Alert.alert('Sucesso', 'Serviço cadastrado!');
+      const formData = new FormData();
+      formData.append('nome', nome);
+      formData.append('valor', valor);
+      formData.append('tempo', tempo);
+      formData.append('id_estabelecimento', idEstabelecimento); // <-- Envia no body
+
+      if (image) {
+        formData.append('file', {
+          uri: image,
+          name: 'image.jpg',
+          type: 'image/jpeg',
+        } as any);
+      }
+
+      await axios.post(`${API_URL}/servicos/create`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      Alert.alert('Serviço cadastrado com sucesso!');
       navigation.goBack();
-    } catch (error) {
-      console.error('Erro ao adicionar serviço:', error);
-      Alert.alert('Erro', 'Não foi possível cadastrar o serviço.');
+    } catch (error: any) {
+      console.log(error.response?.data || error.message);
+      Alert.alert('Erro ao cadastrar', error.response?.data?.error || 'Erro desconhecido');
     }
   };
 
   return (
-    <View style={{ flex: 1, padding: 20, backgroundColor: '#fff' }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Novo Serviço</Text>
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.title}>Novo Serviço</Text>
 
       <TextInput
         placeholder="Nome"
+        style={globalStyles.input}
         value={nome}
         onChangeText={setNome}
-        style={{
-          borderWidth: 1,
-          borderColor: '#ccc',
-          padding: 10,
-          marginBottom: 10,
-          borderRadius: 8,
-        }}
       />
 
       <TextInput
         placeholder="Valor"
+        style={globalStyles.input}
         value={valor}
         onChangeText={setValor}
         keyboardType="numeric"
-        style={{
-          borderWidth: 1,
-          borderColor: '#ccc',
-          padding: 10,
-          marginBottom: 10,
-          borderRadius: 8,
-        }}
       />
 
       <TextInput
         placeholder="Tempo (min)"
+        style={globalStyles.input}
         value={tempo}
         onChangeText={setTempo}
         keyboardType="numeric"
-        style={{
-          borderWidth: 1,
-          borderColor: '#ccc',
-          padding: 10,
-          marginBottom: 20,
-          borderRadius: 8,
-        }}
       />
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: '#007bff',
-          padding: 15,
-          borderRadius: 8,
-          alignItems: 'center',
-        }}
-        onPress={handleAdicionar}
-      >
-        <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-          Cadastrar Serviço
-        </Text>
+      <TouchableOpacity style={globalStyles.button} onPress={pickImage}>
+        <Text style={globalStyles.buttonText}>Selecionar Imagem (opcional)</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          alignItems: 'center',
-          marginTop: 10,
-        }}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={{ color: 'red' }}>Cancelar</Text>
+      {image && (
+        <Image
+          source={{ uri: image }}
+          style={{ width: 100, height: 100, marginVertical: 10, borderRadius: 8 }}
+        />
+      )}
+
+      <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
+        <Text style={globalStyles.buttonText}>Cadastrar Serviço</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text style={globalStyles.link}>Cancelar</Text>
       </TouchableOpacity>
     </View>
   );

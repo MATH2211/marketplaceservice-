@@ -2,11 +2,11 @@ const db = require("../config/db")
 
 async function verificarEstabelecimentoPorParams(req, res, next) {
     try {
-        console.log("Mid: verificarEstabelecimentoPorParams"); 
+        //console.log("Mid: verificarEstabelecimentoPorParams"); 
         const id_estabelecimento = req.params.id_estabelecimento;
-        console.log(`id_estabelecimento: ${id_estabelecimento}`);
+        //console.log(`id_estabelecimento: ${id_estabelecimento}`);
         const adminId = req.adminId;
-        console.log(`adminId: ${adminId}`);
+        //console.log(`adminId: ${adminId}`);
 
         if (!id_estabelecimento) {
             return res.status(400).json({ error: "ID do estabelecimento não fornecido nos parâmetros." });

@@ -1,4 +1,6 @@
 const servicoService = require("../services/servicos.service");
+const uploadImagem = require('../controllers/estabelecimento.controller')
+const image = require('../cloudinary/image.methods');
 
 async function criar(req, res) {
     try {
@@ -12,14 +14,28 @@ async function criar(req, res) {
             id_estabelecimento,
         });
 
+        if (req.file) {
+            const resultado = await image.uploadImagem(req.file.buffer, 'servicos');
+
+            const atualizado = await servicoService.updateImagemServico({
+                id: novo.id,
+                id_estabelecimento,
+                imagem_url: resultado.url,
+            });
+
+            return res.status(201).json(atualizado);
+        }
+
         res.status(201).json(novo);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: err.message });
     }
 }
+
 async function listar(req, res) {
     try {
-        const id_estabelecimento = req.idEstabelecimento;
+        const id_estabelecimento = req.params.id_estabelecimento;
         console.log(`Req.idEstabelecimento: ${id_estabelecimento}`);
         const lista = await servicoService.getServices({id_estabelecimento});
         res.json(lista);
@@ -29,20 +45,28 @@ async function listar(req, res) {
 }
 
 //const servicoService = require("../services/servicos.service");
-
 async function atualizarImagem(req, res) {
     try {
         const { id_estabelecimento, id_servico } = req.params;
-        const { imagem_url } = req.body;
 
-        if (!imagem_url) {
-            return res.status(400).json({ error: "O campo 'imagem_url' é obrigatório." });
+        // Verifica se a imagem foi enviada
+        if (!req.file) {
+            return res.status(400).json({ error: "É necessário enviar uma imagem." });
         }
 
+        // Faz o upload da imagem (armazenamento externo, ex: Cloudinary, S3, etc.)
+        const resultado = await uploadImagem(req.file.buffer, 'servicos');
+
+        // Verifica se houve erro no upload
+        if (!resultado || !resultado.url) {
+            return res.status(500).json({ error: "Erro ao fazer upload da imagem." });
+        }
+
+        // Atualiza o serviço com a nova URL da imagem
         const servicoAtualizado = await servicoService.updateImagemServico({
             id: id_servico,
             id_estabelecimento,
-            imagem_url
+            imagem_url: resultado.url
         });
 
         if (!servicoAtualizado) {

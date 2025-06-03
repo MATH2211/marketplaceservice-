@@ -2,11 +2,15 @@ const db = require("../config/db");
 
 async function verificarEstabelecimento(req, res, next) {
     try {
-        console.log("Mid: verificar Estabelecimento");
-        console.log(req.params);
-        const id_estabelecimento = req.body.id_estabelecimento || req.params.id_estabelecimento;
+        console.log("Middleware: verificarEstabelecimento");
+
+        const id_estabelecimento = req.body.id_estabelecimento;
         const adminId = req.adminId;
-        console.log(id_estabelecimento)
+
+        if (!id_estabelecimento) {
+            return res.status(400).json({ error: "id_estabelecimento não enviado no body" });
+        }
+
         const query = `
             SELECT * FROM estabelecimento
             WHERE id = $1 AND id_admin = $2
@@ -23,5 +27,4 @@ async function verificarEstabelecimento(req, res, next) {
         res.status(500).json({ error: err.message });
     }
 }
-
 module.exports = verificarEstabelecimento;
