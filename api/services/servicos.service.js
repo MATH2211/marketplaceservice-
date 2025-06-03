@@ -34,9 +34,20 @@ async function updateImagemServico({ id, id_estabelecimento, imagem_url }) {
     return rows[0]; // retorna o serviço atualizado
 }
 
+async function deleteService({ id_estabelecimento, id_servico }) {
+    const query = `
+        DELETE FROM servicos 
+        WHERE id_estabelecimento = $1 AND id = $2
+        RETURNING *;
+    `;
+    const values = [id_estabelecimento, id_servico];
 
+    const { rows } = await db.query(query, values);
+    return rows[0]; // Se for undefined, significa que não encontrou
+}
 module.exports = {
     newServico,
     updateImagemServico,
-    getServices
+    getServices,
+    deleteService
 };

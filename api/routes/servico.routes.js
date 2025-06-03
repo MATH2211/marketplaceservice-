@@ -31,5 +31,19 @@ router.get(
   servicoController.listar
 );
 
+// Atualizar imagem do serviço
+// PUT /servicos/:id_estabelecimento/:id_servico/imagem
+router.put(
+    "/:id_estabelecimento/:id_servico/imagem",
+    verifyToken,
+    verifyByParams,
+    servicoController.atualizarImagem
+);
 
+router.delete(
+    "/:id_estabelecimento/:id_servico",
+    verifyToken,
+    verifyByParams,
+    servicoController.deletar
+);
 module.exports = router;

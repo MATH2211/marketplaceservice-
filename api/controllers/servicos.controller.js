@@ -28,9 +28,58 @@ async function listar(req, res) {
     }
 }
 
+//const servicoService = require("../services/servicos.service");
+
+async function atualizarImagem(req, res) {
+    try {
+        const { id_estabelecimento, id_servico } = req.params;
+        const { imagem_url } = req.body;
+
+        if (!imagem_url) {
+            return res.status(400).json({ error: "O campo 'imagem_url' é obrigatório." });
+        }
+
+        const servicoAtualizado = await servicoService.updateImagemServico({
+            id: id_servico,
+            id_estabelecimento,
+            imagem_url
+        });
+
+        if (!servicoAtualizado) {
+            return res.status(404).json({ error: "Serviço não encontrado ou não pertence a este estabelecimento." });
+        }
+
+        res.json(servicoAtualizado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+
+async function deletar(req, res) {
+    try {
+        const { id_estabelecimento, id_servico } = req.params;
+
+        const deletado = await servicoService.deleteService({
+            id_estabelecimento,
+            id_servico
+        });
+
+        if (!deletado) {
+            return res.status(404).json({ error: "Serviço não encontrado ou não pertence a este estabelecimento." });
+        }
+
+        res.json({ message: "Serviço deletado com sucesso." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
 
 
 module.exports = {
     criar,
     listar,
+    deletar,
+    atualizarImagem
 };
