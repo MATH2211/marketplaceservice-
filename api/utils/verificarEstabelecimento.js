@@ -6,7 +6,7 @@ async function verificarEstabelecimento(req, res, next) {
 
         const id_estabelecimento = req.body.id_estabelecimento;
         const adminId = req.adminId;
-
+        console.log(`verify estabelecimento: ${id_estabelecimento}`);
         if (!id_estabelecimento) {
             return res.status(400).json({ error: "id_estabelecimento não enviado no body" });
         }
@@ -20,7 +20,7 @@ async function verificarEstabelecimento(req, res, next) {
         if (rows.length === 0) {
             return res.status(403).json({ error: "Este estabelecimento não pertence ao admin logado" });
         }
-
+        console.log(`Last: ${id_estabelecimento}`);
         req.idEstabelecimento = id_estabelecimento;
         next();
     } catch (err) {

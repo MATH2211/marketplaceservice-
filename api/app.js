@@ -10,6 +10,9 @@ const servicoRoutes = require("./routes/servico.routes");
 const adminRoutes = require('./routes/admin.routes');
 const dashboardRoutes = require("./routes/dashboard.routes");
 const estabelecimentoRoutes = require("./routes/estabelecimento.routes");
+const profissionalRoutes = require("./routes/profissional.routes");
+
+
 //const cloudinaryRoutes = require('./routes/cloudinary.routes'); // se existir
 
 app.use(cors());
@@ -23,6 +26,8 @@ app.use("/estabelecimento", estabelecimentoRoutes);
 //app.use('/cloudinary', cloudinaryRoutes); // rota para upload de imagens
 
 app.use("/servicos", servicoRoutes);
+
+app.use("/estabelecimento/profissional",profissionalRoutes);
 
 
 
