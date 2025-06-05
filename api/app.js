@@ -27,7 +27,7 @@ app.use("/estabelecimento", estabelecimentoRoutes);
 
 app.use("/servicos", servicoRoutes);
 
-app.use("/estabelecimento/profissional",profissionalRoutes);
+app.use("/estabelecimento/profissionais",profissionalRoutes);
 
 
 
