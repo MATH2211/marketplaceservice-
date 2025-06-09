@@ -16,6 +16,8 @@ import Horarios from '../screens/estabelecimento/horarios/Horarios';
 
 //Profissionais
 import Profissionais from '../screens/estabelecimento/profissionais/Profissionais';
+import NewPro from '../screens/estabelecimento/profissionais/NewPro'
+
 
 //Customização
 import Custom from '../screens/estabelecimento/customizacao/Custom';
@@ -44,7 +46,9 @@ export default function AppStack() {
             
             {/* Profissionais */}
             <Stack.Screen name='Profissionais' component={Profissionais} options={{'title': 'Profissionais'}}/>
-            
+            <Stack.Screen name = 'NewPro' component={NewPro} options={{'title':'Novo profissional'}}/>
+
+
             {/* Customizacao*/}
             <Stack.Screen name='Customizacao' component={Custom} options={{'title': 'Customização'}}/>
 

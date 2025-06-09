@@ -22,10 +22,12 @@ router.get(
     profissionalController.listarTodos
 );
 
+/*
 router.get(
     "/:id",
     profissionalController.buscarPorId
 );
+*/
 
 router.put(
     "/:id",
@@ -42,7 +44,7 @@ router.delete(
     profissionalController.deletar
 );
 
-router.get(
+router.post(
   '/all/privado',
   verifyToken,
   verificarEstabelecimento,
