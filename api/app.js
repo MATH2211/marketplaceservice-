@@ -11,7 +11,7 @@ const adminRoutes = require('./routes/admin.routes');
 const dashboardRoutes = require("./routes/dashboard.routes");
 const estabelecimentoRoutes = require("./routes/estabelecimento.routes");
 const profissionalRoutes = require("./routes/profissional.routes");
-
+const horariosRotes = require('./routes/horarios.routes');
 
 //const cloudinaryRoutes = require('./routes/cloudinary.routes'); // se existir
 
@@ -29,6 +29,7 @@ app.use("/servicos", servicoRoutes);
 
 app.use("/estabelecimento/profissionais",profissionalRoutes);
 
+app.use("/estabelecimento/horarios",horariosRotes);
 
 
 // Middleware global de erro (opcional)
