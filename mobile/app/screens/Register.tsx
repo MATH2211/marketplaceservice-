@@ -3,23 +3,37 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { globalStyles } from '../styles/global';
+import { API_URL } from '../config/config';
 
 type Props = NativeStackScreenProps<any>;
 
 export default function Register({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [username, setUsername] = useState('');
+  const [nome, setNome] = useState('');
+  const [celular, setCelular] = useState('');
 
   const handleRegister = async () => {
+    if (!email || !senha || !username || !nome || !celular) {
+      Alert.alert('Erro', 'Preencha todos os campos obrigatórios');
+      return;
+    }
+
     try {
-      await axios.post('http://SEU_IP:PORTA/register', {
+      await axios.post(`${API_URL}/admin/register`, {
         email,
         senha,
+        username,
+        nome,
+        celular,
       });
+
       Alert.alert('Cadastro realizado com sucesso!');
       navigation.navigate('Login');
-    } catch (error) {
-      Alert.alert('Erro no cadastro', 'Tente novamente');
+    } catch (error: any) {
+      console.log(error.response?.data || error.message);
+      Alert.alert('Erro no cadastro', error.response?.data?.error || 'Tente novamente');
     }
   };
 
@@ -28,10 +42,33 @@ export default function Register({ navigation }: Props) {
       <Text style={globalStyles.title}>Cadastro</Text>
 
       <TextInput
+        placeholder="Nome completo"
+        style={globalStyles.input}
+        value={nome}
+        onChangeText={setNome}
+      />
+
+      <TextInput
+        placeholder="Usuário"
+        style={globalStyles.input}
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      <TextInput
+        placeholder="Celular"
+        style={globalStyles.input}
+        value={celular}
+        onChangeText={setCelular}
+        keyboardType="phone-pad"
+      />
+
+      <TextInput
         placeholder="Email"
         style={globalStyles.input}
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
       />
 
       <TextInput

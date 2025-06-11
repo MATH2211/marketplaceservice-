@@ -13,6 +13,7 @@ export default function NewEstabelecimento({ navigation }: Props) {
   const [nome, setNome] = useState('');
   const [endereco, setEndereco] = useState('');
   const [image, setImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -27,42 +28,49 @@ export default function NewEstabelecimento({ navigation }: Props) {
   };
 
   const handleSubmit = async () => {
-    if (!nome || !endereco || !image) {
-      Alert.alert('Preencha todos os campos');
+  if (!nome || !endereco || !image) {
+    Alert.alert('Preencha todos os campos');
+    return;
+  }
+
+  if (loading) return; // impede duplo clique
+
+  setLoading(true);
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+
+    if (!token) {
+      Alert.alert('Erro', 'Token não encontrado');
+      setLoading(false);
       return;
     }
 
-    try {
-      const token = await AsyncStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('nome', nome);
+    formData.append('endereco', endereco);
+    formData.append('imagem', {
+      uri: image,
+      name: 'image.jpg',
+      type: 'image/jpeg',
+    } as any);
 
-      if (!token) {
-        Alert.alert('Erro', 'Token não encontrado');
-        return;
-      }
+    await axios.post(`${API_URL}/estabelecimento/create`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-      const formData = new FormData();
-      formData.append('nome', nome);
-      formData.append('endereco', endereco);
-      formData.append('imagem', {
-        uri: image,
-        name: 'image.jpg',
-        type: 'image/jpeg',
-      } as any);
-
-      await axios.post(`${API_URL}/estabelecimento/create`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      Alert.alert('Estabelecimento cadastrado com sucesso!');
-      navigation.goBack();
-    } catch (error: any) {
-      console.log(error.response?.data || error.message);
-      Alert.alert('Erro ao cadastrar', error.response?.data?.message || 'Erro desconhecido');
-    }
-  };
+    Alert.alert('Estabelecimento cadastrado com sucesso!');
+    navigation.goBack();
+  } catch (error: any) {
+    console.log(error.response?.data || error.message);
+    Alert.alert('Erro ao cadastrar', error.response?.data?.message || 'Erro desconhecido');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <View style={globalStyles.container}>
@@ -93,9 +101,15 @@ export default function NewEstabelecimento({ navigation }: Props) {
         />
       )}
 
-      <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
-        <Text style={globalStyles.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
+      <TouchableOpacity
+  style={[globalStyles.button, loading && { opacity: 0.6 }]}
+  onPress={handleSubmit}
+  disabled={loading}
+>
+  <Text style={globalStyles.buttonText}>
+    {loading ? 'Cadastrando...' : 'Cadastrar'}
+  </Text>
+</TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={globalStyles.link}>Cancelar</Text>

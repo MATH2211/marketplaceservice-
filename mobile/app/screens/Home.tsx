@@ -30,35 +30,35 @@ export default function Home({ navigation }: Props) {
   const [imagens, setImagens] = useState<Imagem[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          Alert.alert('Erro', 'Token não encontrado, faça login novamente');
-          navigation.navigate('Login');
-          return;
-        }
-
-        const response = await axios.get(`${API_URL}/estabelecimento/list`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setEstabelecimentos(response.data.estabelecimentos);
-        setImagens(response.data.imagens);
-      } catch (error: any) {
-        console.error('Erro ao buscar dados:', error);
-        if (error.response) {
-          Alert.alert('Erro', error.response.data.message || 'Erro ao carregar dados');
-        } else {
-          Alert.alert('Erro', 'Não foi possível carregar os dados.');
-        }
+  const unsubscribe = navigation.addListener('focus', async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Erro', 'Token não encontrado, faça login novamente');
+        navigation.navigate('Login');
+        return;
       }
-    };
 
-    fetchData();
-  }, []);
+      const response = await axios.get(`${API_URL}/estabelecimento/list`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setEstabelecimentos(response.data.estabelecimentos);
+      setImagens(response.data.imagens);
+    } catch (error: any) {
+      console.error('Erro ao buscar dados:', error);
+      if (error.response) {
+        Alert.alert('Erro', error.response.data.message || 'Erro ao carregar dados');
+      } else {
+        Alert.alert('Erro', 'Não foi possível carregar os dados.');
+      }
+    }
+  });
+
+  return unsubscribe;
+}, [navigation]);
 
   const getImagem = (id_estabelecimento: number) => {
     const img = imagens.find((i) => i.id_estabelecimento === id_estabelecimento);
