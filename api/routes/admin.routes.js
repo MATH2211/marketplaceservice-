@@ -4,8 +4,10 @@ const adminController = require('../controllers/admin.controller');
 const path = require("path");
 
 router.post('/register', adminController.register);
+
+
 router.get("/register", (req,res) =>{
-    res.send("preto");
+    res.send("teste");
 });
 router.post('/login', adminController.login);
 

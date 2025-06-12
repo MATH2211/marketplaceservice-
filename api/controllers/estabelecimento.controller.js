@@ -5,6 +5,7 @@ const imagemService = require('../services/imagem.service');
 
 
 async function criar(req, res) {
+  console.log("controller criar")
   try {
     const adminId = req.adminId;
     const { nome, endereco } = req.body;
@@ -17,6 +18,7 @@ async function criar(req, res) {
 
     // 2. Se tiver imagem, faz upload e salva no banco
     if (req.file) {
+      console.log("Tem imagem");
       const resultado = await image.uploadImagem(req.file.buffer, 'estabelecimentos');
 
       await imagemService.salvarImagem({
@@ -24,6 +26,8 @@ async function criar(req, res) {
         tipo: 'logo',
         id_estabelecimento: novoEstabelecimento.id,
       });
+    }else{
+      console.log('não tem imagem');
     }
 
     res.status(201).json(novoEstabelecimento);

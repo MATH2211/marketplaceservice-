@@ -13,6 +13,23 @@ async function newHorarioForADay({ id_estabelecimento, id_profissional, dia, ini
     }
 }
 
+async function getHorarios({id_estabelecimento,id_profissional,dia}) {
+    const query = `select * from horarios where id_estabelecimento = $1 and id_profissional = $2 and dia = $3 and disponivel = true;`;
+    const values = [id_estabelecimento,id_profissional,dia];
+    const {rows} = await db.query(query,values);
+    return rows;
+}
+
+async function getPrivateHorarios({id_estabelecimento,id_profissional,dia}) {
+    const query = `select * from horarios where id_estabelecimento = $1 and id_profissional = $2 and dia = $3`;
+    const values = [id_estabelecimento,id_profissional,dia];
+    const {rows} = await db.query(query,values);
+    return rows;
+}
+
+
 module.exports = {
-    newHorarioForADay
+    newHorarioForADay,
+    getHorarios,
+    getPrivateHorarios
 }

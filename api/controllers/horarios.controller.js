@@ -26,7 +26,31 @@ async function postNewHorario(req,res) {
     }       
 }
 
+async function getHorarios(req,res) {
+    const {id_estabelecimento,id_profissional,dia} = req.params;
+    try{
+        const resultado = await horariosService.getHorarios({id_estabelecimento,id_profissional,dia});
+        return res.status(200).json(resultado);
+    }catch (err){
+        console.error(err);
+        return res.status(500).json({error:err.message});
+    }
+}
 
+async function getPrivateHorarios(req,res) {
+    const id_estabelecimento = req.idEstabelecimento;
+    const id_profissional = req.idProfissional;
+    const dia = req.body.dia;
+    try{
+        const resultado = await horariosService.getPrivateHorarios({id_estabelecimento,id_profissional,dia});
+        return res.status(200).json(resultado);
+    }catch (err){
+        console.error(err);
+        return res.status(500).json({error:err.message});
+    }
+}
 module.exports = {
-    postNewHorario
+    postNewHorario,
+    getHorarios,
+    getPrivateHorarios
 }
