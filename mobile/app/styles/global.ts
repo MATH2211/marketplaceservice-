@@ -37,4 +37,9 @@ export const globalStyles = StyleSheet.create({
     color: '#007bff',
     marginTop: 5,
   },
+  text: {
+  fontSize: 16,
+  color: '#333',
+  marginVertical: 10,
+}
 });

@@ -19,3 +19,8 @@ async function criarEstabelecimento({ nome, endereco }, adminId) {
     );
     return result.rows[0];
 }
+
+
+http://192.168.0.109:3000/estabelecimento/profissionais/create
+form data:
+id_estabelecimento,nome,celular,email,file(imagem)

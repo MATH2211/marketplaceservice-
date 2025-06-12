@@ -13,6 +13,8 @@ import Servicos from '../screens/estabelecimento/servicos/Servicos';
 import NewServico from '../screens/estabelecimento/servicos/NewServico';
 //Horários
 import Horarios from '../screens/estabelecimento/horarios/Horarios';
+import NewHorarioPro from '../screens/estabelecimento/horarios/HorarioPro';
+import DiaPro from '../screens/estabelecimento/horarios/DayPro';
 
 //Profissionais
 import Profissionais from '../screens/estabelecimento/profissionais/Profissionais';
@@ -43,6 +45,8 @@ export default function AppStack() {
             <Stack.Screen name='NewServico' component={NewServico} options={{'title': 'Servicos'}}></Stack.Screen>
             {/* Horários */}
             <Stack.Screen name='Horarios' component={Horarios} options={{'title': 'Horarios'}}/>
+            <Stack.Screen name='HorariosPro' component={NewHorarioPro} options={{'title':"Horarios profissionais"}}></Stack.Screen>
+            <Stack.Screen name='DiaPro' component={DiaPro} options={{'title':'Horarios profissionais'}}></Stack.Screen>
             
             {/* Profissionais */}
             <Stack.Screen name='Profissionais' component={Profissionais} options={{'title': 'Profissionais'}}/>

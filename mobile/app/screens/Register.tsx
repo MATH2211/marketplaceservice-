@@ -13,13 +13,13 @@ export default function Register({ navigation }: Props) {
   const [username, setUsername] = useState('');
   const [nome, setNome] = useState('');
   const [celular, setCelular] = useState('');
-
+  const [loading,setLoading] = useState(false);
   const handleRegister = async () => {
     if (!email || !senha || !username || !nome || !celular) {
       Alert.alert('Erro', 'Preencha todos os campos obrigatórios');
       return;
     }
-
+    setLoading(true);
     try {
       await axios.post(`${API_URL}/admin/register`, {
         email,
@@ -34,6 +34,8 @@ export default function Register({ navigation }: Props) {
     } catch (error: any) {
       console.log(error.response?.data || error.message);
       Alert.alert('Erro no cadastro', error.response?.data?.error || 'Tente novamente');
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -79,8 +81,12 @@ export default function Register({ navigation }: Props) {
         onChangeText={setSenha}
       />
 
-      <TouchableOpacity style={globalStyles.button} onPress={handleRegister}>
-        <Text style={globalStyles.buttonText}>Cadastrar</Text>
+      <TouchableOpacity 
+      style={globalStyles.button} 
+      onPress={handleRegister}
+      disabled = {loading}      
+>
+        <Text style={globalStyles.buttonText}>{loading ? 'Cadastrar':'Cadastrando'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.goBack()}>
