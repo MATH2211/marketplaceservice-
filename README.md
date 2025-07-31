@@ -1,4 +1,4 @@
-# android_projeto
+# Sistema de gerenciamento para barbearias
 
 Sistema completo de gerenciamento para barbearias, com aplicativo mobile exclusivo para administradores e interface web para clientes.
 
