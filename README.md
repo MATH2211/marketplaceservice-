@@ -2,8 +2,8 @@
 
 Sistema completo de gerenciamento para barbearias, com aplicativo mobile exclusivo para administradores e interface web voltada para os clientes.  
 Este projeto foi desenvolvido por uma equipe de estudantes da UniFacimp como parte de uma avaliação acadêmica, com o objetivo de obter nota. 
-Apesar disso, o sistema foi idealizado com foco em usabilidade real e possui potencial para aplicação comercial futura. 
-Este projeto é uma versão ampliada e escalável de um protótipo anterior, que era voltado exclusivamente para web e focado apenas no front-end.  
+Apesar disso, o sistema foi idealizado com foco em usabilidade real e possui potencial para aplicação comercial futura.
+Este projeto é uma versão ampliada e escalável de um protótipo anterior, que era voltado exclusivamente para web e focado apenas no front-end.
 A versão original foi desenvolvida para atender um único barbeiro, enquanto esta nova versão foi repensada para suportar múltiplos estabelecimentos e oferecer uma estrutura completa de gerenciamento, com back-end robusto e aplicativo mobile para administradores.
 
 ## 🧰 Funcionalidades
