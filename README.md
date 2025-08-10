@@ -52,3 +52,11 @@ git clone <url-do-repositorio>
 ### 4. Configurar arquivo .env
 - Na raiz do projeto, editar o arquivo .env.
 - Preencher as variáveis com os dados do seu banco de dados e as chaves da API do Cloudinary.
+
+### 5. Definir URL da API no arquivo `config.ts`
+
+- No diretório `mobile/app/config/`, abra o arquivo `config.ts`.  
+- Configure o IP e a porta da API, usando o mesmo IP definido no arquivo `.env` da API backend.  
+
+> **Dica:**  
+> O IP deve ser o da máquina na rede local para que o aplicativo React Native em dispositivo físico consiga se conectar corretamente.
