@@ -32,23 +32,45 @@ A versão original foi desenvolvida para atender um único barbeiro, enquanto es
 - **Armazenamento de Imagens:** Cloudinary
 - **Documentação da API:** [Acessar via Postman](link-do-postman-aqui)
 
-# Inicialização
-Clonar repositorio.
-Banco de dados postgres: importar arquivo sql para criação das tabelas.
-Nesta versão as imagens são armazenadas na nuvem cloudinary.
-Criar conta no site(plano gratuito 1gb de armazenamento)
-Criar arquivo .env com as configurações do seu banco de dados e as chaves da api da sua nuvem cloudinary.
+## 🛠️ Tecnologias Utilizadas
 
-HOST = 192.168.18.230 #Ip da maquina na rede o react native por ser inicializado em um dispositivo externo o localhost não funciona, é preciso integrar a api na mesma rede
-PORT=3000
-DB_USER=postgres
-DB_HOST=localhost
-DB_NAME=agendafacil
-DB_PASS=markim
-DB_PORT=5432
-JWT_SECRET=3h2k5k34b3jhjhf2f2c2lll
-CLOUD_NAME = df83lvdun
-CLOUD_API_KEY = 222578585336251
-CLOUD_API_SECRET = NdRk8DoqAvnpdAvTBKhUX21DkvY
+- **Front-end:**  
+  - Web: HTML, CSS, JavaScript  
+  - App: React Native
+
+- **Back-end:**  
+  - Node.js (Express)
+
+- **Banco de Dados:**  
+  - PostgreSQL
+
+- **Armazenamento de Imagens:**  
+  - Cloudinary
+
+- **Documentação da API:**  
+  - [Acessar via Postman](link-do-postman-aqui)
+
+---
+
+# 🚀 Inicialização do Projeto
+
+### 1. Clonar o repositório  
+```bash
+git clone <url-do-repositorio>
+2. Configuração do Banco de Dados (PostgreSQL)
+Criar o banco de dados.
+
+Importar o arquivo .sql fornecido para criação das tabelas.
+
+3. Configuração do Cloudinary (armazenamento de imagens)
+As imagens são armazenadas na nuvem Cloudinary nesta versão.
+
+Criar uma conta gratuita (1 GB de armazenamento) em:
+https://cloudinary.com
+
+4. Configurar arquivo .env
+Na raiz do projeto, editar o arquivo .env.
+
+Preencher as variáveis com os dados do seu banco de dados e as chaves da API do Cloudinary.
 
 
