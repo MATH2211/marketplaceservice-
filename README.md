@@ -38,7 +38,7 @@ A versão original foi desenvolvida para atender um único barbeiro, enquanto es
 
 ### 1. Clonar o repositório  
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/Catfallen/android_projeto
 ```
 ### 2. Configuração do Banco de Dados (PostgreSQL)
 - Criar o banco de dados.
