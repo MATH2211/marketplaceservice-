@@ -68,10 +68,13 @@ git clone https://github.com/Catfallen/android_projeto
 cd api
 ```
 - Iniciar aplicação
-- node app.js
-Obs.: Não é necessário instalar módulos para a API, pois a pasta node_modules foi enviada junto no repositório.
+```bash
+node app.js
+```
+> Obs.: Não é necessário instalar módulos para a API, pois a pasta node_modules foi enviada junto no repositório.
 
 ##### Terminal 2
+- Abrir o diretório
 - A pasta `node_modules` do Expo é muito pesada, por isso **não deve ser enviada** diretamente para o repositório.
 - Para resolver isso, é necessário instalar novamente todos os módulos listados no `package-lock.json` usando o comando:
 
