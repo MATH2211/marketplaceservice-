@@ -42,7 +42,7 @@ git clone https://github.com/Catfallen/android_projeto
 ```
 ### 2. Configuração do Banco de Dados (PostgreSQL)
 - Criar o banco de dados.
-- Importar o arquivo .sql fornecido para criação das tabelas.
+- Importar o arquivo estrutura_completa.sql fornecido para criação das tabelas.
 
 ### 3. Configuração do Cloudinary (armazenamento de imagens)
 - As imagens são armazenadas na nuvem Cloudinary nesta versão.
