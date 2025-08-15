@@ -64,7 +64,9 @@ git clone https://github.com/Catfallen/android_projeto
 #### Para rodar o projeto é preciso ter dois terminais abertos, um para a api e outro para o aplicativo.
 - Terminal 1 (api express)
 - Abrir o diretório da api
-- ```bash cd api```
+```bash
+cd api
+```
 - Iniciar aplicação
 - node app.js
 - Não é preciso instalar nenhum modulo pois o node_modules foi enviado diretamente
