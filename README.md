@@ -50,13 +50,40 @@ git clone https://github.com/Catfallen/android_projeto
 - https://cloudinary.com
 
 ### 4. Configurar arquivo .env
-- Na raiz do projeto, editar o arquivo .env.
+- Dentro da pasta api, editar o arquivo .env.
 - Preencher as variáveis com os dados do seu banco de dados e as chaves da API do Cloudinary.
-
+- No arquivo tem o passo a passo para o preenchimento das variaveis
 ### 5. Definir URL da API no arquivo `config.ts`
-
 - No diretório `mobile/app/config/`, abra o arquivo `config.ts`.  
 - Configure o IP e a porta da API, usando o mesmo IP definido no arquivo `.env` da API backend.  
 
 > **Dica:**  
 > O IP deve ser o da máquina na rede local para que o aplicativo React Native em dispositivo físico consiga se conectar corretamente.
+
+### 6. Rodando o projeto
+#### Para rodar o projeto é preciso ter dois terminais abertos, um para a api e outro para o aplicativo.
+- Terminal 1 (api express)
+- Abrir o diretório da api
+- ```bash cd api```
+- Iniciar aplicação
+- node app.js
+- Não é preciso instalar nenhum modulo pois o node_modules foi enviado diretamente
+
+-Terminal 2
+- A pasta `node_modules` do Expo é muito pesada, por isso **não deve ser enviada** diretamente para o repositório.
+- Para resolver isso, é necessário instalar novamente todos os módulos listados no `package-lock.json` usando o comando:
+
+```bash
+npm install
+```
+
+
+
+
+
+
+
+
+
+
+
