@@ -75,20 +75,15 @@ node app.js
 
 ##### Terminal 2
 - Abrir o diretório
+```bash
+cd mobile/app
+```
 - A pasta `node_modules` do Expo é muito pesada, por isso **não deve ser enviada** diretamente para o repositório.
 - Para resolver isso, é necessário instalar novamente todos os módulos listados no `package-lock.json` usando o comando:
-
 ```bash
 npm install
 ```
-
-
-
-
-
-
-
-
-
-
-
+- Rodar o aplicativo
+```bash
+npx expo start
+```
