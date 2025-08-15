@@ -69,7 +69,7 @@ cd api
 ```
 - Iniciar aplicação
 - node app.js
-- Não é preciso instalar nenhum modulo pois o node_modules foi enviado diretamente
+Obs.: Não é necessário instalar módulos para a API, pois a pasta node_modules foi enviada junto no repositório.
 
 -Terminal 2
 - A pasta `node_modules` do Expo é muito pesada, por isso **não deve ser enviada** diretamente para o repositório.
