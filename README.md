@@ -61,7 +61,8 @@ git clone https://github.com/Catfallen/android_projeto
 > O IP deve ser o da máquina na rede local para que o aplicativo React Native em dispositivo físico consiga se conectar corretamente.
 
 ### 6. Rodando o projeto
-#### Para rodar o projeto é preciso ter dois terminais abertos, um para a api e outro para o aplicativo.
+#### Para executar o projeto, abra **dois terminais**: um para a **API** e outro para o **aplicativo**.  
+Recomenda-se utilizar o **Command Prompt (cmd)**, pois a execução no **PowerShell** pode gerar incompatibilidades ou erros durante o processo.
 ##### Terminal 1 (api express)
 - Abrir o diretório da api
 ```bash
