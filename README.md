@@ -93,4 +93,5 @@ npm install
 npx expo start
 ```
 - Será gerado um **QR Code**.  
-Para visualizar o projeto em um dispositivo móvel, é necessário instalar o aplicativo **Expo Go** no **Android** ou **iOS** e realizar a leitura do código.
+- Qualquer atualização feita no diretório `app` será refletida automaticamente no dispositivo externo.  
+- Para visualizar o projeto em um dispositivo móvel, é necessário instalar o aplicativo **Expo Go** no **Android** ou **iOS** e realizar a leitura do QR Code gerado.
