@@ -72,9 +72,13 @@ cd api
 ```bash
 node app.js
 ```
+Para rodar em modo de desenvolvimento (recomendado), que salva e reinicia automaticamente a aplicação:
+```bash
+npm run dev
+```
 > Obs.: Não é necessário instalar módulos para a API, pois a pasta node_modules foi enviada junto no repositório.
 
-##### Terminal 2
+##### Terminal 2 (aplicativo expo go)
 - Abrir o diretório
 ```bash
 cd mobile/app
@@ -88,3 +92,5 @@ npm install
 ```bash
 npx expo start
 ```
+- Será gerado um **QR Code**.  
+Para visualizar o projeto em um dispositivo móvel, é necessário instalar o aplicativo **Expo Go** no **Android** ou **iOS** e realizar a leitura do código.
