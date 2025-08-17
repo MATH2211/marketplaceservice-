@@ -25,7 +25,7 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     padding: 15,
     borderRadius: 8,
-    width: '100%',
+    width: '50%',
     alignItems: 'center',
     marginBottom: 15,
   },

@@ -12,7 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { globalStyles } from '../../../styles/global';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import { API_URL } from '../../../config/config';
 type Props = NativeStackScreenProps<any>;
 
 interface Profissional {
@@ -40,7 +40,7 @@ export default function Horarios({ navigation }: Props) {
       console.log('ID Estabelecimento:', id_estabelecimento);
 
       const response = await axios.post(
-        'http://192.168.0.109:3000/estabelecimento/profissionais/all/privado',
+        `${API_URL}/estabelecimento/profissionais/all/privado`,
         { id_estabelecimento: Number(id_estabelecimento) },
         {
           headers: {
