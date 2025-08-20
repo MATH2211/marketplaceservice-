@@ -9,6 +9,7 @@ import Agendamentos from '../screens/estabelecimento/agendamentos/Agendamentos';
 
 //Serviços
 import Servicos from '../screens/estabelecimento/servicos/Servicos';
+import Edit from '../screens/estabelecimento/servicos/Edit';
 
 import NewServico from '../screens/estabelecimento/servicos/NewServico';
 //Horários
@@ -40,7 +41,7 @@ export default function AppStack() {
 
             {/* Serviços */}
             <Stack.Screen name='Servicos' component={Servicos} options={{'title': 'Servircos'}}/>
-            
+            <Stack.Screen name='ServicoEdit' component={Edit} options={{'title':"Editar serviço"}}/>
             {/* Novo */}
             <Stack.Screen name='NewServico' component={NewServico} options={{'title': 'Servicos'}}></Stack.Screen>
             {/* Horários */}
@@ -51,11 +52,8 @@ export default function AppStack() {
             {/* Profissionais */}
             <Stack.Screen name='Profissionais' component={Profissionais} options={{'title': 'Profissionais'}}/>
             <Stack.Screen name = 'NewPro' component={NewPro} options={{'title':'Novo profissional'}}/>
-
-
             {/* Customizacao*/}
             <Stack.Screen name='Customizacao' component={Custom} options={{'title': 'Customização'}}/>
-
         </Stack.Navigator>
     );
 }

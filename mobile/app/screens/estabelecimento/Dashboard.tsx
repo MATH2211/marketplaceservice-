@@ -33,8 +33,9 @@ export default function Dashboard({ navigation }: Props) {
       </TouchableOpacity>
 
       <TouchableOpacity
+      //navigation.navigate('ServicoEdit', {servico});
         style={globalStyles.button}
-        onPress={() => navigation.navigate('Servicos')}
+        onPress={() => navigation.navigate('Servicos',{idEstabelecimento})}
       >
         <Text style={globalStyles.buttonText}>Serviços</Text>
       </TouchableOpacity>

@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_URL } from '../../../config/config';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 interface Servico {
   id: number;
@@ -16,9 +18,17 @@ interface Servico {
 export default function Servicos({ navigation }: any) {
   const [servicos, setServicos] = useState<Servico[]>([]);
 
-  useEffect(() => {
+  
+useFocusEffect(
+  useCallback(() => {
     carregarServicos();
-  }, []);
+
+    // Se precisar limpar algo ao sair da tela, pode retornar aqui
+    return () => {
+      console.log("Saiu da tela");
+    };
+  }, [])
+);
 
   const carregarServicos = async () => {
     try {
@@ -43,7 +53,7 @@ export default function Servicos({ navigation }: any) {
   };
 
   const handleEdit = (servico: Servico) => {
-    navigation.navigate('EditServico', { servico });
+    navigation.navigate('ServicoEdit', {servico});
   };
 
   const renderServico = ({ item }: { item: Servico }) => {

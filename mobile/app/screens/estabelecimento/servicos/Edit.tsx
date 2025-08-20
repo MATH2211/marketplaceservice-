@@ -36,12 +36,11 @@ export default function Edit({ route, navigation }: Props) {
       }
 
       await axios.put(
-        `${API_URL}/servicos/update/${servico.id}`,
+        `${API_URL}/servicos/edit/${idEstabelecimento}/${servico.id}`,
         {
           nome,
           valor,
-          tempo: Number(tempo),
-          id_estabelecimento: Number(idEstabelecimento),
+          tempo: Number(tempo)
         },
         {
           headers: { Authorization: `Bearer ${token}` },
