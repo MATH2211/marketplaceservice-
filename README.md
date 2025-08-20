@@ -61,7 +61,8 @@ git clone https://github.com/Catfallen/android_projeto
 > O IP deve ser o da máquina na rede local para que o aplicativo React Native em dispositivo físico consiga se conectar corretamente.
 
 ### 6. Rodando o projeto
-#### Para rodar o projeto é preciso ter dois terminais abertos, um para a api e outro para o aplicativo.
+#### Para executar o projeto, abra **dois terminais**: um para a **API** e outro para o **aplicativo**.  
+Recomenda-se utilizar o **Command Prompt (cmd)**, pois a execução no **PowerShell** pode gerar incompatibilidades ou erros durante o processo.
 ##### Terminal 1 (api express)
 - Abrir o diretório da api
 ```bash
@@ -71,9 +72,13 @@ cd api
 ```bash
 node app.js
 ```
+Para rodar em modo de desenvolvimento (recomendado), que salva e reinicia automaticamente a aplicação:
+```bash
+npm run dev
+```
 > Obs.: Não é necessário instalar módulos para a API, pois a pasta node_modules foi enviada junto no repositório.
 
-##### Terminal 2
+##### Terminal 2 (aplicativo expo go)
 - Abrir o diretório
 ```bash
 cd mobile/app
@@ -87,3 +92,6 @@ npm install
 ```bash
 npx expo start
 ```
+- Será gerado um **QR Code**.  
+- Qualquer atualização feita no diretório `app` será refletida automaticamente no dispositivo externo.  
+- Para visualizar o projeto em um dispositivo móvel, é necessário instalar o aplicativo **Expo Go** no **Android** ou **iOS** e realizar a leitura do QR Code gerado.
