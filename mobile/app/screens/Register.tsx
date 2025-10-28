@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  Alert, 
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard 
+} from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { globalStyles } from '../styles/global';
+import { globalStyles, colors } from '../styles/global';
 import { API_URL } from '../config/config';
+import FloatingLabelInput from './estabelecimento/components/FloatingLabelInput';
 
 type Props = NativeStackScreenProps<any>;
 
@@ -13,7 +22,8 @@ export default function Register({ navigation }: Props) {
   const [username, setUsername] = useState('');
   const [nome, setNome] = useState('');
   const [celular, setCelular] = useState('');
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleRegister = async () => {
     if (!email || !senha || !username || !nome || !celular) {
       Alert.alert('Erro', 'Preencha todos os campos obrigatórios');
@@ -34,64 +44,68 @@ export default function Register({ navigation }: Props) {
     } catch (error: any) {
       console.log(error.response?.data || error.message);
       Alert.alert('Erro no cadastro', error.response?.data?.error || 'Tente novamente');
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Cadastro</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={globalStyles.container}>
+        <Text style={globalStyles.title}>Cadastro</Text>
 
-      <TextInput
-        placeholder="Nome completo"
-        style={globalStyles.input}
-        value={nome}
-        onChangeText={setNome}
-      />
+        <FloatingLabelInput
+          label="Nome completo *"
+          value={nome}
+          onChangeText={setNome}
+          autoCapitalize="words"
+        />
 
-      <TextInput
-        placeholder="Usuário"
-        style={globalStyles.input}
-        value={username}
-        onChangeText={setUsername}
-      />
+        <FloatingLabelInput
+          label="Usuário *"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        placeholder="Celular"
-        style={globalStyles.input}
-        value={celular}
-        onChangeText={setCelular}
-        keyboardType="phone-pad"
-      />
+        <FloatingLabelInput
+          label="Celular *"
+          value={celular}
+          onChangeText={setCelular}
+          keyboardType="phone-pad"
+        />
 
-      <TextInput
-        placeholder="Email"
-        style={globalStyles.input}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
+        <FloatingLabelInput
+          label="E-mail *"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        placeholder="Senha"
-        secureTextEntry
-        style={globalStyles.input}
-        value={senha}
-        onChangeText={setSenha}
-      />
+        <FloatingLabelInput
+          label="Senha *"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
+        />
 
-      <TouchableOpacity 
-      style={globalStyles.button} 
-      onPress={handleRegister}
-      disabled = {loading}      
->
-        <Text style={globalStyles.buttonText}>{loading ? 'Cadastrar':'Cadastrando'}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+          style={[globalStyles.button, loading && { opacity: 0.6 }]} 
+          onPress={handleRegister}
+          disabled={loading}      
+        >
+          {loading ? (
+            <ActivityIndicator color={colors.white} />
+          ) : (
+            <Text style={globalStyles.buttonText}>Cadastrar</Text>
+          )}
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={globalStyles.link}>Voltar para Login</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={globalStyles.link}>Voltar para Login</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }

@@ -1,14 +1,19 @@
-import React, { useState,useContext } from 'react';
-//import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';  // ajuste o caminho conforme sua estrutura
-
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard 
+} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { globalStyles } from '../styles/global';
 import { API_URL } from '../config/config';
-
+import { AuthContext } from '../context/AuthContext';
+import FloatingLabelInput from './estabelecimento/components/FloatingLabelInput';
 
 type Props = NativeStackScreenProps<any>;
 
@@ -16,7 +21,7 @@ export default function Login({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const { login } = useContext(AuthContext); // pega a função login do contexto
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async () => {
     try {
@@ -27,47 +32,44 @@ export default function Login({ navigation }: Props) {
 
       const token = response.data.token;
       await AsyncStorage.setItem('token', token);
-
-      // Agora chama o login do contexto para atualizar o estado global
       await login(token);
-
-      // NÃO precisa navegar aqui manualmente, o app vai trocar a stack automaticamente
     } catch (error: any) {
-      // seu código de tratamento de erro permanece igual
+      Alert.alert('Erro', 'Falha no login');
     }
   };
 
-
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Login</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={globalStyles.container}>
+        <Text style={globalStyles.title}>Login</Text>
 
-      <TextInput
-        placeholder="Email"
-        style={globalStyles.input}
-        value={email}
-        onChangeText={setEmail}
-      />
+        <FloatingLabelInput
+          label="E-mail *"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        placeholder="Senha"
-        secureTextEntry
-        style={globalStyles.input}
-        value={senha}
-        onChangeText={setSenha}
-      />
+        <FloatingLabelInput
+          label="Senha"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
-        <Text style={globalStyles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
+          <Text style={globalStyles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={globalStyles.link}>Cadastrar-se</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={globalStyles.link}>Cadastrar-se</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-        <Text style={globalStyles.link}>Esqueceu a senha?</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={globalStyles.link}>Esqueceu a senha?</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
