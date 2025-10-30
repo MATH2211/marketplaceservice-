@@ -19,6 +19,12 @@ async function listarEstabelecimentos(adminId) {
     return result.rows;
 }
 
+async function listarTodosEstabelecimentos() {
+  const query = 'SELECT id, nome, endereco FROM estabelecimento ORDER BY nome';
+  const resultado = await pool.query(query);
+  return resultado.rows;
+}
+
 async function deletarEstabelecimento(id, adminId) {
     // Verifica se o estabelecimento pertence a este administrador
     const verif = await pool.query(
@@ -32,7 +38,8 @@ async function deletarEstabelecimento(id, adminId) {
 }
 
 module.exports = {
-    criarEstabelecimento,
-    listarEstabelecimentos,
-    deletarEstabelecimento
+  criarEstabelecimento,
+  listarEstabelecimentos,
+  deletarEstabelecimento,
+  listarTodosEstabelecimentos  // ← ADICIONAR
 };

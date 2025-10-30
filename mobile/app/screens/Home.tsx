@@ -40,6 +40,15 @@ export default function Home({ navigation }: Props) {
       </TouchableOpacity>
 
       <TouchableOpacity
+        style={styles.menuButton}
+        onPress={() => navigation.navigate('TodosEstabelecimentos')}
+      >
+        <Ionicons name="globe-outline" size={24} color={colors.primary} />
+        <Text style={styles.menuButtonText}>Todos os Estabelecimentos</Text>
+        <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={[styles.menuButton, { marginTop: 'auto', marginBottom: 20 }]}
         onPress={handleLogout}
       >

@@ -12,30 +12,18 @@ const upload = multer({ storage });
 router.post(
   "/create",
   verifyToken,
-  upload.single('imagem'), // <- trata o upload da imagem (opcional)
+  upload.single('imagem'),
   estabelecimentoController.criar
 );
 
-// 📄 Listar estabelecimentos
+// 📄 Listar estabelecimentos do usuário
 router.get("/list", verifyToken, estabelecimentoController.listar);
-router.get("/imagens",verifyToken,estabelecimentoController.getLogo);
+
+// 🖼️ Buscar imagens
+router.get("/imagens", verifyToken, estabelecimentoController.getLogo);
+
+// 🌍 Listar TODOS os estabelecimentos do sistema
+router.get("/todos", verifyToken, estabelecimentoController.listarTodos);
+
+// ⚠️ module.exports DEVE SER O ÚLTIMO, apenas UMA VEZ
 module.exports = router;
-
-
-
-/*
-const express = require("express");
-const router = express.Router();
-const estabelecimentoController = require("../controllers/estabelecimento.controller");
-
-const verifyToken = require("../utils/verifyToken");
-
-
-router.post("/create",verifyToken,estabelecimentoController.criar);
-
-router.get("/list",verifyToken,estabelecimentoController.listar);
-
-
-module.exports = router;
-
-*/

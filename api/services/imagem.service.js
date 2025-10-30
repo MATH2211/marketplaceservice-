@@ -12,27 +12,22 @@ async function salvarImagem({ imagem_url, tipo = 'logo', id_estabelecimento }) {
   return rows[0];
 }
 
-
-async function updateServiceImage({imagem_url,id_estabelecimento}) {
+async function updateServiceImage({imagem_url, id_estabelecimento}) {
   const query = `
     UPDATE SERVICOS
     SET imagem_url = $1
     WHERE id = $2
-  `
-  const values = [imagem_url,id_estabelecimento]
-  const {rows} = await db.query(query,values);
+  `;
+  const values = [imagem_url, id_estabelecimento];
+  const { rows } = await db.query(query, values);
   return rows[0];
 }
 
-
-/*
-async function listImagens(id_estabelecimento) {
-    const query = `select * from imagens where id_estabelecimento = ($1)`;
-    const values = [id_estabelecimento];
-    const {rows} = await db.query(query,values);
-    return rows;
+async function buscarTodasImagens() {
+  const query = 'SELECT id, imagem_url, tipo, id_estabelecimento FROM imagens WHERE tipo = $1';
+  const resultado = await db.query(query, ['logo']);  // ← CORRIGIDO: pool -> db
+  return resultado.rows;
 }
-*/
 
 async function listarImagensPorEstabelecimento(id_estabelecimento) {
   const query = `
@@ -47,21 +42,21 @@ async function listarImagensPorEstabelecimento(id_estabelecimento) {
 
 async function getLogoByIdAdmin(id_admin) {
   const query = `
-  SELECT i.* 
-  FROM imagens i 
-  JOIN estabelecimento e ON i.id_estabelecimento = e.id
-  WHERE e.id_admin = $1
-  AND i.tipo = 'logo';
-`
+    SELECT i.* 
+    FROM imagens i 
+    JOIN estabelecimento e ON i.id_estabelecimento = e.id
+    WHERE e.id_admin = $1
+    AND i.tipo = 'logo';
+  `;
   const values = [id_admin];
   const { rows } = await db.query(query, values);
   return rows;
 }
 
-
-
 module.exports = {
   salvarImagem,
   listarImagensPorEstabelecimento,
-  getLogoByIdAdmin
+  updateServiceImage,
+  getLogoByIdAdmin,
+  buscarTodasImagens
 };

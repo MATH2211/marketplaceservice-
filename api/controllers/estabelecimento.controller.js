@@ -48,6 +48,16 @@ async function listar(req, res) {
   }
 }
 
+async function listarTodos(req, res) {
+  try {
+    const estabelecimentos = await estabelecimentoService.listarTodosEstabelecimentos();
+    const imagens = await imagemService.buscarTodasImagens();
+    res.json({ estabelecimentos, imagens });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 async function getLogo(req,res) {
     try{
       const adminId = req.adminId;
@@ -74,5 +84,7 @@ module.exports = {
   criar,
   listar,
   deletar,
-  getLogo
+  getLogo,
+  listarTodos  // ← ADICIONAR
 };
+
