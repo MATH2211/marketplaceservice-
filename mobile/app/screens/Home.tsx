@@ -18,49 +18,63 @@ export default function Home({ navigation }: Props) {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Bem-vindo!</Text>
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <Text style={globalStyles.title}>Bem-vindo!</Text>
 
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => navigation.navigate('NewEstabelecimento')}
-      >
-        <Ionicons name="add-circle-outline" size={24} color={colors.primary} />
-        <Text style={styles.menuButtonText}>Adicionar Estabelecimento</Text>
-        <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('NewEstabelecimento')}
+        >
+          <Ionicons name="add-circle-outline" size={24} color={colors.primary} />
+          <Text style={styles.menuButtonText}>Adicionar Estabelecimento</Text>
+          <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => navigation.navigate('MeusEstabelecimentos')}
-      >
-        <Ionicons name="business-outline" size={24} color={colors.primary} />
-        <Text style={styles.menuButtonText}>Meus Estabelecimentos</Text>
-        <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('MeusEstabelecimentos')}
+        >
+          <Ionicons name="business-outline" size={24} color={colors.primary} />
+          <Text style={styles.menuButtonText}>Meus Estabelecimentos</Text>
+          <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => navigation.navigate('TodosEstabelecimentos')}
-      >
-        <Ionicons name="globe-outline" size={24} color={colors.primary} />
-        <Text style={styles.menuButtonText}>Todos os Estabelecimentos</Text>
-        <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('TodosEstabelecimentos')}
+        >
+          <Ionicons name="globe-outline" size={24} color={colors.primary} />
+          <Text style={styles.menuButtonText}>Todos os Estabelecimentos</Text>
+          <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.menuButton, { marginTop: 'auto', marginBottom: 20 }]}
-        onPress={handleLogout}
-      >
-        <Ionicons name="log-out-outline" size={24} color={colors.error} />
-        <Text style={[styles.menuButtonText, { color: colors.error }]}>Sair</Text>
-        <Ionicons name="chevron-forward" size={24} color={colors.error} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.menuButton, styles.logoutButton]}
+          onPress={handleLogout}
+        >
+          <Ionicons name="log-out-outline" size={24} color={colors.error} />
+          <Text style={[styles.menuButtonText, { color: colors.error }]}>Sair</Text>
+          <Ionicons name="chevron-forward" size={24} color={colors.error} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  contentContainer: {
+    width: '100%',
+    maxWidth: 500,
+    alignItems: 'center',
+  },
   menuButton: {
     backgroundColor: colors.white,
     borderRadius: 12,
@@ -86,5 +100,8 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     flex: 1,
     marginLeft: 15,
+  },
+  logoutButton: {
+    marginTop: 20,
   },
 });

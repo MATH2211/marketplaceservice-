@@ -41,7 +41,7 @@ export default function Login({ navigation }: Props) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={globalStyles.container}>
-        <Text style={globalStyles.title}>Login</Text>
+        <Text style={globalStyles.title}>marketplace serviços</Text>
 
         <FloatingLabelInput
           label="E-mail *"
