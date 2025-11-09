@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { globalStyles } from '../../../styles/global';
+import { globalStyles, colors } from '../../../styles/global';
 import { API_URL } from '../../../config/config';
 
 type Props = NativeStackScreenProps<any>;
@@ -83,61 +83,85 @@ export default function NewServico({ navigation }: Props) {
     }
   };
 
+  const renderContent = () => {
+    const content = (
+      <ScrollView 
+        contentContainerStyle={{ flexGrow: 1, padding: 20 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={globalStyles.title}>Novo Serviço</Text>
+
+        <TextInput
+          placeholder="Nome do Serviço"
+          placeholderTextColor={colors.textLight}
+          style={globalStyles.input}
+          value={nome}
+          onChangeText={setNome}
+        />
+
+        <TextInput
+          placeholder="Valor (R$)"
+          placeholderTextColor={colors.textLight}
+          style={globalStyles.input}
+          value={valor}
+          onChangeText={setValor}
+          keyboardType="numeric"
+        />
+
+        <TextInput
+          placeholder="Tempo (minutos)"
+          placeholderTextColor={colors.textLight}
+          style={globalStyles.input}
+          value={tempo}
+          onChangeText={setTempo}
+          keyboardType="numeric"
+        />
+
+        <TouchableOpacity style={globalStyles.button} onPress={pickImage}>
+          <Text style={globalStyles.buttonText}>Selecionar Imagem (opcional)</Text>
+        </TouchableOpacity>
+
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{ 
+              width: 100, 
+              height: 100, 
+              marginVertical: 10, 
+              borderRadius: 8,
+              borderWidth: 2,
+              borderColor: colors.border,
+            }}
+          />
+        )}
+
+        <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
+          <Text style={globalStyles.buttonText}>Cadastrar Serviço</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={globalStyles.link}>Cancelar</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+
+    if (Platform.OS === 'web') {
+      return content;
+    }
+
+    return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        {content}
+      </TouchableWithoutFeedback>
+    );
+  };
+
   return (
     <KeyboardAvoidingView 
       style={{ flex: 1 }} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView 
-          contentContainerStyle={{ flexGrow: 1, padding: 20 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <Text style={globalStyles.title}>Novo Serviço</Text>
-
-          <TextInput
-            placeholder="Nome"
-            style={globalStyles.input}
-            value={nome}
-            onChangeText={setNome}
-          />
-
-          <TextInput
-            placeholder="Valor"
-            style={globalStyles.input}
-            value={valor}
-            onChangeText={setValor}
-            keyboardType="numeric"
-          />
-
-          <TextInput
-            placeholder="Tempo (min)"
-            style={globalStyles.input}
-            value={tempo}
-            onChangeText={setTempo}
-            keyboardType="numeric"
-          />
-
-          <TouchableOpacity style={globalStyles.button} onPress={pickImage}>
-            <Text style={globalStyles.buttonText}>Selecionar Imagem (opcional)</Text>
-          </TouchableOpacity>
-
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 100, height: 100, marginVertical: 10, borderRadius: 8 }}
-            />
-          )}
-
-          <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
-            <Text style={globalStyles.buttonText}>Cadastrar Serviço</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={globalStyles.link}>Cancelar</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+      {renderContent()}
     </KeyboardAvoidingView>
   );
 }

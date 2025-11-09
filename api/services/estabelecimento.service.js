@@ -1,12 +1,14 @@
 const pool = require('../config/db');
-const db = require("../config/db")
-async function criarEstabelecimento({ nome, endereco }, id_admin) {
+const db = require("../config/db");
+
+async function criarEstabelecimento({ nome, endereco, modalidade }, id_admin) {
     const query = `
-    INSERT INTO estabelecimento (nome, endereco, id_admin)
-    VALUES ($1, $2, $3)
-    RETURNING *;
+        INSERT INTO estabelecimento (nome, endereco, modalidade, id_admin)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
     `;
-    const values = [nome, endereco, id_admin];
+    const values = [nome, endereco, modalidade, id_admin];
+
     const { rows } = await db.query(query, values);
     return rows[0];
 }
@@ -20,9 +22,9 @@ async function listarEstabelecimentos(adminId) {
 }
 
 async function listarTodosEstabelecimentos() {
-  const query = 'SELECT id, nome, endereco FROM estabelecimento ORDER BY nome';
-  const resultado = await pool.query(query);
-  return resultado.rows;
+    const query = 'SELECT id, nome, endereco, modalidade FROM estabelecimento ORDER BY nome';
+    const resultado = await pool.query(query);
+    return resultado.rows;
 }
 
 async function deletarEstabelecimento(id, adminId) {
@@ -38,8 +40,8 @@ async function deletarEstabelecimento(id, adminId) {
 }
 
 module.exports = {
-  criarEstabelecimento,
-  listarEstabelecimentos,
-  deletarEstabelecimento,
-  listarTodosEstabelecimentos  // ← ADICIONAR
+    criarEstabelecimento,
+    listarEstabelecimentos,
+    deletarEstabelecimento,
+    listarTodosEstabelecimentos
 };

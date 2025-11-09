@@ -1,18 +1,16 @@
 const estabelecimentoService = require('../services/estabelecimento.service');
-const image = require('../cloudinary/image.methods')
+const image = require('../cloudinary/image.methods');
 const imagemService = require('../services/imagem.service');
 
-
-
 async function criar(req, res) {
-  console.log("controller criar")
+  console.log("controller criar");
   try {
     const adminId = req.adminId;
-    const { nome, endereco } = req.body;
+    const { nome, endereco, modalidade } = req.body;  // ✅ ADICIONAR modalidade aqui
 
-    // 1. Cria o estabelecimento
+    // 1. Cria o estabelecimento COM modalidade
     const novoEstabelecimento = await estabelecimentoService.criarEstabelecimento(
-      { nome, endereco },
+      { nome, endereco, modalidade },  // ✅ PASSAR modalidade aqui
       adminId
     );
 
@@ -26,7 +24,7 @@ async function criar(req, res) {
         tipo: 'logo',
         id_estabelecimento: novoEstabelecimento.id,
       });
-    }else{
+    } else {
       console.log('não tem imagem');
     }
 
@@ -42,7 +40,7 @@ async function listar(req, res) {
     const adminId = req.adminId;
     const estabelecimentos = await estabelecimentoService.listarEstabelecimentos(adminId);
     const imagens = await imagemService.getLogoByIdAdmin(adminId);
-    res.json({estabelecimentos, imagens});
+    res.json({ estabelecimentos, imagens });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -58,16 +56,15 @@ async function listarTodos(req, res) {
   }
 }
 
-async function getLogo(req,res) {
-    try{
-      const adminId = req.adminId;
-      const imagens = await imagemService.getLogoByIdAdmin(adminId);
-      res.json(imagens);
-    }catch (err){
-      res.status(500).json({error: err.message});
-    }
+async function getLogo(req, res) {
+  try {
+    const adminId = req.adminId;
+    const imagens = await imagemService.getLogoByIdAdmin(adminId);
+    res.json(imagens);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
-
 
 async function deletar(req, res) {
   try {
@@ -85,6 +82,5 @@ module.exports = {
   listar,
   deletar,
   getLogo,
-  listarTodos  // ← ADICIONAR
+  listarTodos
 };
-
