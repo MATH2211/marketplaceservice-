@@ -22,6 +22,13 @@ async function getServices({id_estabelecimento}) {
     return rows;
 }
 
+async function getAllServicos(id_estabelecimento) {
+  const query = 'SELECT * FROM servicos WHERE id_estabelecimento = $1 ORDER BY nome';
+  const result = await pool.query(query, [id_estabelecimento]);
+  return result.rows;
+}
+
+
 async function updateImagemServico({ id, id_estabelecimento, imagem_url }) {
     const query = `
         UPDATE servicos

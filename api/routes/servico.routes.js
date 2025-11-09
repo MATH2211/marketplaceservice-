@@ -18,24 +18,24 @@ router.post(
 );
 
 
-// Rota para listar serviços de um estabelecimento
+router.get('/public_all/:id_estabelecimento', servicoController.listarTodos);
 
-/*
+
+
 router.get(
   "/list/:id_estabelecimento",
   verifyToken,
   verificarEstabelecimento,
   servicoController.listar
 );
-*/
+
 
 router.get(
   "/list/:id_estabelecimento",
   servicoController.listar
 );
 
-// Atualizar imagem do serviço
-// PUT /servicos/:id_estabelecimento/:id_servico/imagem
+
 router.put(
     "/:id_estabelecimento/:id_servico/imagem",
     verifyToken,

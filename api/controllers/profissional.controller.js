@@ -7,15 +7,14 @@ async function criar(req, res) {
         const id_estabelecimento = req.idEstabelecimento;
 
         const novo = await profissionalService.postProfissionais({ nome, celular, email, id_estabelecimento });
+
         if (req.file) {
             const resultado = await image.uploadImagem(req.file.buffer, 'profissionais');
-
             const atualizado = await profissionalService.updateImagemProfissional({
                 id: novo.id,
                 id_estabelecimento,
                 imagem_url: resultado.url,
             });
-
             return res.status(201).json(atualizado);
         }
 
@@ -97,15 +96,28 @@ async function listarTodos(req, res) {
     }
 }
 
+// NOVA FUNÇÃO: Listar profissionais por estabelecimento (rota personalizada)
+async function listarPorEstabelecimento(req, res) {
+    try {
+        const { id } = req.params;
+        console.log('Buscando profissionais do estabelecimento:', id);
+        const profissionais = await profissionalService.getAllProfissionais(id);
+        res.json({ profissionais });
+    } catch (error) {
+        console.error('Erro ao listar profissionais:', error);
+        res.status(500).json({ error: 'Erro ao listar profissionais' });
+    }
+}
+
 async function listarTodosPrivado(req, res) {
-  try {
-    const id_estabelecimento = req.idEstabelecimento; // assume que middleware já setou
-    const profissionais = await profissionalService.getAllProfissionaisPrivado(id_estabelecimento);
-    return res.json(profissionais);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: err.message });
-  }
+    try {
+        const id_estabelecimento = req.idEstabelecimento; // assume que middleware já setou
+        const profissionais = await profissionalService.getAllProfissionaisPrivado(id_estabelecimento);
+        return res.json(profissionais);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: err.message });
+    }
 }
 
 module.exports = {
@@ -114,5 +126,6 @@ module.exports = {
     atualizar,
     deletar,
     listarTodos,
-    listarTodosPrivado
+    listarTodosPrivado,
+    listarPorEstabelecimento // adiciona para exportação e uso em routes
 };

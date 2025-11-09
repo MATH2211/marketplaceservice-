@@ -24,11 +24,11 @@ router.get(
     profissionalController.listarTodos
 );
 
-// Buscar profissional por ID (descomente se precisar)
-// router.get(
-//     "/:id",
-//     profissionalController.buscarPorId
-// );
+router.get(
+  "/por_estabelecimento/:id",
+  profissionalController.listarPorEstabelecimento
+);
+
 
 // Atualizar profissional
 router.put(
