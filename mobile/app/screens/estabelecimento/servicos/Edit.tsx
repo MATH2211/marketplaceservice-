@@ -50,8 +50,15 @@ export default function Edit({ route, navigation }: Props) {
       Alert.alert('Sucesso', 'Serviço atualizado!');
       navigation.goBack();
     } catch (error) {
-      console.error(error);
-      Alert.alert('Erro', 'Não foi possível atualizar o serviço.');
+      console.error('==== ERRO COMPLETO ====');
+      console.error('Erro:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Status:', error.response?.status);
+        console.error('Dados da resposta:', error.response?.data);
+        console.error('URL chamada:', error.config?.url);
+  }
+  console.error('==== FIM DO ERRO ====');
+  Alert.alert('Erro', 'Não foi possível atualizar o serviço.');
     }
   };
 

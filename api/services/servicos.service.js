@@ -1,33 +1,31 @@
 const db = require("../config/db");
 
-
-async function newServico({nome,valor,tempo,id_estabelecimento, imagem_url = null}) {
+async function newServico({nome, valor, tempo, id_estabelecimento, imagem_url = null}) {
     const query = `
-        INSERT INTO servicos (nome,valor,tempo,id_estabelecimento,imagem_url)
-        VALUES ($1,$2,$3,$4,$5) RETURNING id
-    `
-    const values = [nome,valor,tempo,id_estabelecimento,imagem_url];
-    const {rows} = await db.query(query,values);
+        INSERT INTO servicos (nome, valor, tempo, id_estabelecimento, imagem_url)
+        VALUES ($1, $2, $3, $4, $5) RETURNING id
+    `;
+    const values = [nome, valor, tempo, id_estabelecimento, imagem_url];
+    const {rows} = await db.query(query, values);
     return rows[0];
 }
 
 async function getServices({id_estabelecimento}) {
     console.log(`id: ${id_estabelecimento}`);
     const query = `
-        SELECT * FROM servicos where id_estabelecimento = $1
-    `
+        SELECT * FROM servicos WHERE id_estabelecimento = $1
+    `;
     const values = [id_estabelecimento];
     console.log(`values: ${values}`);
-    const {rows} = await db.query(query,values);
+    const {rows} = await db.query(query, values);
     return rows;
 }
 
 async function getAllServicos(id_estabelecimento) {
-  const query = 'SELECT * FROM servicos WHERE id_estabelecimento = $1 ORDER BY nome';
-  const result = await pool.query(query, [id_estabelecimento]);
-  return result.rows;
+    const query = 'SELECT * FROM servicos WHERE id_estabelecimento = $1 ORDER BY nome';
+    const result = await db.query(query, [id_estabelecimento]);
+    return result.rows;
 }
-
 
 async function updateImagemServico({ id, id_estabelecimento, imagem_url }) {
     const query = `
@@ -41,6 +39,19 @@ async function updateImagemServico({ id, id_estabelecimento, imagem_url }) {
     return rows[0]; // retorna o serviço atualizado
 }
 
+// NOVA FUNÇÃO - EDITAR SERVIÇO
+async function updateServico({ id_servico, id_estabelecimento, nome, valor, tempo }) {
+    const query = `
+        UPDATE servicos
+        SET nome = $1, valor = $2, tempo = $3
+        WHERE id = $4 AND id_estabelecimento = $5
+        RETURNING *;
+    `;
+    const values = [nome, valor, tempo, id_servico, id_estabelecimento];
+    const { rows } = await db.query(query, values);
+    return rows[0]; // retorna o serviço atualizado ou undefined se não encontrou
+}
+
 async function deleteService({ id_estabelecimento, id_servico }) {
     const query = `
         DELETE FROM servicos 
@@ -48,13 +59,16 @@ async function deleteService({ id_estabelecimento, id_servico }) {
         RETURNING *;
     `;
     const values = [id_estabelecimento, id_servico];
-
     const { rows } = await db.query(query, values);
     return rows[0]; // Se for undefined, significa que não encontrou
 }
+
 module.exports = {
     newServico,
     updateImagemServico,
     getServices,
-    deleteService
+    deleteService,
+    getAllServicos,
+    updateServico  // ← Certifique-se que está aqui
 };
+
