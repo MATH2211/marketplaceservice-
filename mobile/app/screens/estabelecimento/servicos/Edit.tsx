@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  Alert, 
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +28,10 @@ export default function Edit({ route, navigation }: Props) {
 
   const [nome, setNome] = useState(servico.nome);
   const [valor, setValor] = useState(servico.valor);
-  const [tempo, setTempo] = useState(servico.tempo.toString());
+  
+  // Divide o tempo em horas e minutos
+  const [horas, setHoras] = useState(Math.floor(servico.tempo / 60).toString());
+  const [minutos, setMinutos] = useState((servico.tempo % 60).toString());
 
   const handleSalvar = async () => {
     try {
@@ -35,12 +47,33 @@ export default function Edit({ route, navigation }: Props) {
         return;
       }
 
+      // Valida os campos
+      if (!nome.trim()) {
+        Alert.alert('Erro', 'O nome do serviço é obrigatório.');
+        return;
+      }
+
+      if (!valor.trim()) {
+        Alert.alert('Erro', 'O valor do serviço é obrigatório.');
+        return;
+      }
+
+      // Converte horas e minutos de volta para minutos totais
+      const horasNum = Number(horas) || 0;
+      const minutosNum = Number(minutos) || 0;
+      const tempoEmMinutos = (horasNum * 60) + minutosNum;
+
+      if (tempoEmMinutos === 0) {
+        Alert.alert('Erro', 'O tempo deve ser maior que zero.');
+        return;
+      }
+
       await axios.put(
         `${API_URL}/servicos/edit/${idEstabelecimento}/${servico.id}`,
         {
           nome,
           valor,
-          tempo: Number(tempo)
+          tempo: tempoEmMinutos
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -56,44 +89,64 @@ export default function Edit({ route, navigation }: Props) {
         console.error('Status:', error.response?.status);
         console.error('Dados da resposta:', error.response?.data);
         console.error('URL chamada:', error.config?.url);
-  }
-  console.error('==== FIM DO ERRO ====');
-  Alert.alert('Erro', 'Não foi possível atualizar o serviço.');
+      }
+      console.error('==== FIM DO ERRO ====');
+      Alert.alert('Erro', 'Não foi possível atualizar o serviço.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Nome:</Text>
-      <TextInput
-        value={nome}
-        onChangeText={setNome}
-        style={styles.input}
-        placeholder="Nome do serviço"
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.label}>Nome:</Text>
+        <TextInput
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input}
+          placeholder="Nome do serviço"
+        />
 
-      <Text style={styles.label}>Valor (R$):</Text>
-      <TextInput
-        value={valor}
-        onChangeText={setValor}
-        style={styles.input}
-        keyboardType="decimal-pad"
-        placeholder="Valor"
-      />
+        <Text style={styles.label}>Valor (R$):</Text>
+        <TextInput
+          value={valor}
+          onChangeText={setValor}
+          style={styles.input}
+          keyboardType="decimal-pad"
+          placeholder="Valor"
+        />
 
-      <Text style={styles.label}>Tempo (min):</Text>
-      <TextInput
-        value={tempo}
-        onChangeText={setTempo}
-        style={styles.input}
-        keyboardType="number-pad"
-        placeholder="Tempo em minutos"
-      />
+        <Text style={styles.label}>Duração do serviço:</Text>
+        <View style={styles.timeContainer}>
+          <View style={styles.timeInputWrapper}>
+            <TextInput
+              value={horas}
+              onChangeText={setHoras}
+              style={styles.timeInput}
+              keyboardType="number-pad"
+              placeholder="0"
+              maxLength={2}
+            />
+            <Text style={styles.timeLabel}>horas</Text>
+          </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleSalvar}>
-        <Text style={styles.buttonText}>Salvar</Text>
-      </TouchableOpacity>
-    </View>
+          <View style={styles.timeInputWrapper}>
+            <TextInput
+              value={minutos}
+              onChangeText={setMinutos}
+              style={styles.timeInput}
+              keyboardType="number-pad"
+              placeholder="0"
+              maxLength={2}
+            />
+            <Text style={styles.timeLabel}>minutos</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={handleSalvar}>
+          <Text style={styles.buttonText}>Salvar</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -115,6 +168,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     marginTop: 5,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5,
+    gap: 10,
+  },
+  timeInputWrapper: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  timeLabel: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#666',
   },
   button: {
     marginTop: 30,

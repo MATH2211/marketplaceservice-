@@ -17,7 +17,8 @@ export const colors = {
   textPrimary: '#0D47A1',    // Texto principal (azul escuro)
   textSecondary: '#64B5F6',  // Texto secundário (azul médio)
   textLight: '#90CAF9',      // Texto claro
-  
+  text: '#0D47A1',
+
   // Bordas
   border: '#BBDEFB',         // Bordas suaves
   

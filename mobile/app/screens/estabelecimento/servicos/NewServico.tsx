@@ -10,7 +10,8 @@ import {
   KeyboardAvoidingView, 
   Platform,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  StyleSheet
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +25,8 @@ type Props = NativeStackScreenProps<any>;
 export default function NewServico({ navigation }: Props) {
   const [nome, setNome] = useState('');
   const [valor, setValor] = useState('');
-  const [tempo, setTempo] = useState('');
+  const [horas, setHoras] = useState('');
+  const [minutos, setMinutos] = useState('');
   const [image, setImage] = useState<string | null>(null);
 
   const pickImage = async () => {
@@ -40,8 +42,18 @@ export default function NewServico({ navigation }: Props) {
   };
 
   const handleSubmit = async () => {
-    if (!nome || !valor || !tempo) {
-      Alert.alert('Preencha todos os campos obrigatórios');
+    if (!nome || !valor) {
+      Alert.alert('Erro', 'Preencha o nome e valor do serviço');
+      return;
+    }
+
+    // Converte horas e minutos para minutos totais
+    const horasNum = Number(horas) || 0;
+    const minutosNum = Number(minutos) || 0;
+    const tempoEmMinutos = (horasNum * 60) + minutosNum;
+
+    if (tempoEmMinutos === 0) {
+      Alert.alert('Erro', 'O tempo deve ser maior que zero');
       return;
     }
 
@@ -57,7 +69,7 @@ export default function NewServico({ navigation }: Props) {
       const formData = new FormData();
       formData.append('nome', nome);
       formData.append('valor', valor);
-      formData.append('tempo', tempo);
+      formData.append('tempo', tempoEmMinutos.toString());
       formData.append('id_estabelecimento', idEstabelecimento);
 
       if (image) {
@@ -75,7 +87,7 @@ export default function NewServico({ navigation }: Props) {
         },
       });
 
-      Alert.alert('Serviço cadastrado com sucesso!');
+      Alert.alert('Sucesso', 'Serviço cadastrado com sucesso!');
       navigation.goBack();
     } catch (error: any) {
       console.log(error.response?.data || error.message);
@@ -105,17 +117,38 @@ export default function NewServico({ navigation }: Props) {
           style={globalStyles.input}
           value={valor}
           onChangeText={setValor}
-          keyboardType="numeric"
+          keyboardType="decimal-pad"
         />
 
-        <TextInput
-          placeholder="Tempo (minutos)"
-          placeholderTextColor={colors.textLight}
-          style={globalStyles.input}
-          value={tempo}
-          onChangeText={setTempo}
-          keyboardType="numeric"
-        />
+        {/* CAMPO DE TEMPO COM HORAS E MINUTOS */}
+        <Text style={styles.label}>Duração do serviço:</Text>
+        <View style={styles.timeContainer}>
+          <View style={styles.timeInputWrapper}>
+            <TextInput
+              placeholder="0"
+              placeholderTextColor={colors.textLight}
+              style={styles.timeInput}
+              value={horas}
+              onChangeText={setHoras}
+              keyboardType="number-pad"
+              maxLength={2}
+            />
+            <Text style={styles.timeLabel}>horas</Text>
+          </View>
+
+          <View style={styles.timeInputWrapper}>
+            <TextInput
+              placeholder="0"
+              placeholderTextColor={colors.textLight}
+              style={styles.timeInput}
+              value={minutos}
+              onChangeText={setMinutos}
+              keyboardType="number-pad"
+              maxLength={2}
+            />
+            <Text style={styles.timeLabel}>minutos</Text>
+          </View>
+        </View>
 
         <TouchableOpacity style={globalStyles.button} onPress={pickImage}>
           <Text style={globalStyles.buttonText}>Selecionar Imagem (opcional)</Text>
@@ -165,3 +198,40 @@ export default function NewServico({ navigation }: Props) {
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 10,
+    marginTop: 15,
+    color: colors.text,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+    gap: 10,
+  },
+  timeInputWrapper: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 18,
+    backgroundColor: colors.white,
+    color: colors.text,
+  },
+  timeLabel: {
+    marginTop: 5,
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+});

@@ -30,12 +30,20 @@ interface Profissional {
   email: string;
 }
 
+interface Servico {
+  id: number;
+  nome: string;
+  valor: string;
+  tempo: number;
+  imagem_url?: string;
+}
+
 interface Estabelecimento {
   id: number;
   nome: string;
   endereco: string;
   telefone?: string;
-  servicos?: string;
+  servicos?: Servico[];
   modalidade?: string;
   profissionais?: Profissional[];
 }
@@ -106,17 +114,17 @@ export default function TodosEstabelecimentos({ navigation }: Props) {
   };
 
   const loadServicos = async (idEstabelecimento: number) => {
-  try {
-    const token = await AsyncStorage.getItem('token');
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    const response = await axios.get(`${API_URL}/servicos/public_all/${idEstabelecimento}`, { headers });
-    return response.data || [];
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const response = await axios.get(`${API_URL}/servicos/public_all/${idEstabelecimento}`, { headers });
+      console.log('🔧 Serviços carregados:', response.data);
+      return response.data || [];
     } catch (error) {
-    console.error('Erro ao buscar serviços:', error);
-    return [];
+      console.error('Erro ao buscar serviços:', error);
+      return [];
     }
   };
-
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -181,9 +189,17 @@ export default function TodosEstabelecimentos({ navigation }: Props) {
     setSelectedEstabelecimento(item);
     setModalVisible(true);
     
-    // Carrega profissionais de forma assíncrona
-    const profissionais = await loadProfissionais(item.id);
-    setSelectedEstabelecimento({ ...item, profissionais });
+    // Carrega profissionais E serviços simultaneamente
+    const [profissionais, servicos] = await Promise.all([
+      loadProfissionais(item.id),
+      loadServicos(item.id)
+    ]);
+    
+    setSelectedEstabelecimento({ 
+      ...item, 
+      profissionais,
+      servicos
+    });
   };
 
   if (loading) {
@@ -347,14 +363,29 @@ export default function TodosEstabelecimentos({ navigation }: Props) {
                   </View>
                 )}
 
-                {/* Serviços */}
-                <View style={styles.infoItem}>
-                  <Ionicons name="hammer-outline" size={24} color={colors.primary} />
-                  <View style={styles.infoTextContainer}>
-                    <Text style={styles.infoLabel}>Serviços</Text>
-                    <Text style={styles.infoValue}>{selectedEstabelecimento?.servicos || 'Não informado'}</Text>
+                {/* SEÇÃO DE SERVIÇOS ATUALIZADA - SEM ÍCONE E COM NOME COMPLETO */}
+                <Text style={styles.sectionTitle}>Serviços</Text>
+                {selectedEstabelecimento?.servicos && selectedEstabelecimento.servicos.length > 0 ? (
+                  selectedEstabelecimento.servicos.map((servico) => (
+                    <View key={servico.id} style={[styles.infoItem, { alignItems: 'flex-start' }]}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={[styles.infoLabel, { flexWrap: 'wrap' }]} numberOfLines={0}>
+                          {servico.nome}
+                        </Text>
+                        <Text style={styles.infoValue}>
+                          R$ {servico.valor} • {Math.floor(servico.tempo / 60)}h {servico.tempo % 60}min
+                        </Text>
+                      </View>
+                    </View>
+                  ))
+                ) : (
+                  <View style={styles.infoItem}>
+                    <View style={styles.infoTextContainer}>
+                      <Text style={styles.infoLabel}>Serviços</Text>
+                      <Text style={styles.infoValue}>Nenhum serviço cadastrado</Text>
+                    </View>
                   </View>
-                </View>
+                )}
 
                 {/* Categoria */}
                 <View style={styles.infoItem}>
@@ -389,5 +420,3 @@ export default function TodosEstabelecimentos({ navigation }: Props) {
     </View>
   );
 }
-
-
